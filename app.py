@@ -19,9 +19,14 @@ app.register_blueprint(producto_bp)
 app.register_blueprint(usuario_bp)
 
 from routes.persona import bp as persona_bp
+
 from routes.rol import bp as rol_bp
 app.register_blueprint(persona_bp)
 app.register_blueprint(rol_bp)
+
+from routes.empresa import bp as empresa_bp
+app.register_blueprint(empresa_bp)
+
 
 
 if __name__ == '__main__':
