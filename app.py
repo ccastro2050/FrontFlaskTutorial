@@ -19,7 +19,9 @@ app.register_blueprint(producto_bp)
 app.register_blueprint(usuario_bp)
 
 from routes.persona import bp as persona_bp
+from routes.rol import bp as rol_bp
 app.register_blueprint(persona_bp)
+app.register_blueprint(rol_bp)
 
 
 if __name__ == '__main__':
