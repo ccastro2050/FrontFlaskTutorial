@@ -41,7 +41,8 @@ from routes.ruta import bp as ruta_bp
 
 app.register_blueprint(ruta_bp)
 
-
+from routes.factura import bp as factura_bp
+app.register_blueprint(factura_bp)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5300)
