@@ -1,0 +1,55 @@
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">CRUD Facturas</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Menu de navegacion" class="navbar-toggler" />
+
+<div class="nav-scrollable">
+    <nav class="nav flex-column">
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path == '/' }}" href="/">
+                <span class="bi bi-house-door-fill-nav-menu"></span> Home
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path.startswith('/producto') }}" href="/producto">
+                <span class="bi bi-list-nested-nav-menu"></span> Producto
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path.startswith('/persona') }}" href="/persona">
+                <span class="bi bi-list-nested-nav-menu"></span> Persona
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path.startswith('/usuario') }}" href="/usuario">
+                <span class="bi bi-list-nested-nav-menu"></span> Usuario
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path.startswith('/empresa') }}" href="/empresa">
+                <span class="bi bi-list-nested-nav-menu"></span> Empresa
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path.startswith('/rol') }}" href="/rol">
+                <span class="bi bi-list-nested-nav-menu"></span> Rol
+            </a>
+        </div>
+
+        <div class="nav-item px-3">
+            <a class="nav-link {{ 'active' if request.path.startswith('/ruta') }}" href="/ruta">
+                <span class="bi bi-list-nested-nav-menu"></span> Ruta
+            </a>
+        </div>
+
+    </nav>
+</div>
