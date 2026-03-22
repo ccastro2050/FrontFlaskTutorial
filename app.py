@@ -12,10 +12,15 @@ app.secret_key = SECRET_KEY
 # Registrar Blueprints
 from routes.home import bp as home_bp
 from routes.producto import bp as producto_bp
-from routes.persona import bp as persona_bp
+
+from routes.usuario import bp as usuario_bp
 app.register_blueprint(home_bp)
 app.register_blueprint(producto_bp)
+app.register_blueprint(usuario_bp)
+
+from routes.persona import bp as persona_bp
 app.register_blueprint(persona_bp)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5300)
