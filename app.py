@@ -30,9 +30,9 @@ from routes.rol import bp as rol_bp
 app.register_blueprint(rol_bp)
 
 from routes.empresa import bp as empresa_bp
+from routes.ruta import bp as ruta_bp
 app.register_blueprint(empresa_bp)
-
-
+app.register_blueprint(ruta_bp)
 
 
 if __name__ == '__main__':
