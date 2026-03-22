@@ -292,6 +292,38 @@ Porque ambos estudiantes agregaron una línea nueva en el mismo lugar de `app.py
 
 ---
 
+## "Subí el código equivocado en la rama de otro estudiante"
+
+Esto pasa cuando un estudiante ejecuta los comandos git en la terminal equivocada. Por ejemplo, est2 ejecuta `git push -u origin crud-vendedor` pero en la carpeta de est3, subiendo el código de NavMenu en la branch de Vendedor.
+
+**¿Qué pasa?** El código llega a GitHub y el PR se puede crear y mergear normalmente. El código final en `main` será correcto. Pero el PR dice "CRUD Vendedor" y tiene cambios de NavMenu — es confuso para quien revisa.
+
+**¿Cómo solucionarlo?**
+
+**Opción 1 (la más simple):** Cambiar el título del PR en GitHub para que coincida con lo que realmente tiene. Est1 (Scrum Master) revisa el contenido real del PR, no el título, y hace merge igual.
+
+**Opción 2 (la correcta):** El estudiante corrige desde su terminal:
+
+```powershell
+git checkout main              # volver a main
+git branch -D crud-vendedor    # borrar la rama local incorrecta
+git checkout -b crud-vendedor  # crear la rama de nuevo desde main limpio
+```
+
+Luego vuelve a escribir su código, hace commit y push con `--force`:
+
+```powershell
+git add .
+git commit -m "Agregar ruta y template CRUD Vendedor"
+git push -u origin crud-vendedor --force   # sobreescribe la rama en GitHub
+```
+
+**¿Cuándo usar cada opción?**
+- Si el PR aún no fue mergeado → Opción 2 (corregir)
+- Si el PR ya fue mergeado → no importa, el código ya está en main
+
+---
+
 ## Después de los dos merges
 
 **Los tres estudiantes** actualizan su main:
