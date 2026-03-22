@@ -30,7 +30,9 @@ from routes.rol import bp as rol_bp
 app.register_blueprint(rol_bp)
 
 from routes.empresa import bp as empresa_bp
+from routes.vendedor import bp as vendedor_bp
 app.register_blueprint(empresa_bp)
+app.register_blueprint(vendedor_bp)
 
 
 
