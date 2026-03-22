@@ -1,0 +1,661 @@
+# Paso 0 — Plan de Desarrollo y Buenas Prácticas
+
+**Este paso se hace ANTES de escribir una sola línea de código.**
+
+Independiente de la metodología de desarrollo que se use (Scrum, Kanban, RUP, ágil, por prototipos o híbridos), todo proyecto debe comenzar con un **plan de desarrollo** que defina qué se va a hacer, quién lo hace, cómo se va a trabajar y cuándo se entrega.
+
+---
+
+## 1. Buenas prácticas para trabajo colaborativo en GitHub
+
+### 1.1 Estrategia de ramas (Branching Strategy)
+
+Para equipos pequeños (2-5 personas), se recomienda **GitHub Flow**:
+
+```
+main (siempre estable, código que funciona)
+  ├── feature/crud-producto    (Estudiante 1 trabaja aquí)
+  ├── feature/crud-persona     (Estudiante 2 trabaja aquí)
+  └── feature/crud-usuario     (Estudiante 3 trabaja aquí)
+```
+
+**Reglas:**
+- `main` siempre debe funcionar (se puede ejecutar `python app.py` sin errores)
+- Nadie hace push directo a `main` — todo entra por Pull Request
+- Cada tarea tiene su propia rama
+- Las ramas se borran después del merge
+
+### 1.2 Convenciones para nombres de ramas
+
+Usar prefijos que indiquen el tipo de trabajo:
+
+| Prefijo | Uso | Ejemplo |
+|---------|-----|---------|
+| `feature/` | Nueva funcionalidad | `feature/crud-producto` |
+| `fix/` | Corrección de errores | `fix/error-api-connection` |
+| `refactor/` | Mejora de código sin cambiar funcionalidad | `refactor/api-service` |
+| `docs/` | Documentación | `docs/manual-usuario` |
+| `hotfix/` | Corrección urgente en producción | `hotfix/crash-al-guardar` |
+
+**Ejemplo práctico para este proyecto:**
+
+```
+feature/crud-producto          ← Estudiante 1
+feature/crud-persona           ← Estudiante 2
+feature/crud-usuario           ← Estudiante 3
+feature/layout-navegacion      ← Estudiante 1
+feature/crud-factura           ← Estudiante 2
+docs/actualizar-readme         ← Estudiante 3
+fix/error-select-empresa       ← quien lo detecte
+```
+
+### 1.3 Convenciones para mensajes de commit
+
+Usar mensajes claros que digan **qué** se hizo:
+
+**Formato recomendado:**
+```
+tipo: descripción corta
+
+Ejemplos:
+feat: agregar ruta y template CRUD Producto
+feat: agregar api_service.py para conexión con API
+fix: corregir error en select de empresas vacío
+refactor: extraer lógica de parseo a función separada
+docs: agregar manual de instalación
+style: corregir indentación en producto.html
+```
+
+**Tipos comunes:**
+| Tipo | Significado |
+|------|-------------|
+| `feat` | Nueva funcionalidad |
+| `fix` | Corrección de error |
+| `docs` | Documentación |
+| `style` | Formato (no cambia lógica) |
+| `refactor` | Reestructuración de código |
+| `test` | Agregar o modificar pruebas |
+
+### 1.4 Convenciones para Pull Requests
+
+- **Título claro:** describir qué hace el PR en una oración
+- **Descripción:** explicar qué se hizo, por qué y cómo probarlo
+- **Un PR por tarea:** no mezclar varias funcionalidades en un PR
+- **Revisar antes de aprobar:** al menos una persona revisa el código
+
+**Ejemplo de PR bien hecho:**
+
+```
+Título: Agregar ruta y template CRUD Producto
+
+Descripción:
+- Se creó routes/producto.py con Blueprint
+- Se creó templates/pages/producto.html con tabla y formulario
+- Se registró el Blueprint en app.py
+- Permite listar, crear, editar y eliminar productos
+
+¿Cómo probarlo?
+1. Ejecutar python app.py
+2. Ir a http://localhost:5100/producto
+3. Verificar que se listan los productos de la BD
+```
+
+### 1.5 Flujo de trabajo diario
+
+```
+1. git checkout main
+2. git pull                          ← traer lo último
+3. git checkout -b feature/mi-tarea  ← crear rama
+4. (escribir código)
+5. git add .
+6. git commit -m "feat: descripción"
+7. git push -u origin feature/mi-tarea
+8. Crear PR en GitHub
+9. Otro miembro revisa y aprueba
+10. Merge a main
+11. Borrar la rama
+```
+
+---
+
+## 2. Plan de desarrollo
+
+### 2.1 Descripción del problema
+
+Se necesita un **frontend web** que permita gestionar las tablas de una base de datos de facturación (productos, personas, usuarios, empresas, roles, rutas, clientes, vendedores y facturas). El frontend se construye con **Flask (Python)** y se conecta a una API REST existente (`ApiGenericaCsharp`) que expone operaciones CRUD genéricas y Stored Procedures.
+
+### 2.2 Tecnologías
+
+| Tecnología | Uso |
+|-----------|-----|
+| **Python 3** | Lenguaje de programación |
+| **Flask** | Framework web (servidor y rutas) |
+| **Jinja2** | Motor de templates HTML (viene con Flask) |
+| **requests** | Librería para hacer peticiones HTTP a la API |
+| **Bootstrap 5** | Framework CSS para diseño visual (via CDN) |
+| **Git / GitHub** | Control de versiones y colaboración |
+
+### 2.3 Estructura del proyecto
+
+```
+FrontFlaskTutorial/
+├── app.py                    ← Punto de entrada, crea Flask y registra Blueprints
+├── config.py                 ← URL de la API y clave secreta
+├── requirements.txt          ← Dependencias (Flask, requests)
+├── services/
+│   └── api_service.py        ← Servicio que conecta con la API REST
+├── routes/
+│   ├── __init__.py
+│   ├── home.py               ← Blueprint de la página inicio
+│   ├── producto.py           ← Blueprint CRUD Producto
+│   ├── persona.py            ← Blueprint CRUD Persona
+│   └── ...                   ← Un archivo por tabla
+├── templates/
+│   ├── layout/
+│   │   └── base.html         ← Layout principal (menú + estructura)
+│   ├── components/
+│   │   └── nav_menu.html     ← Menú de navegación lateral
+│   └── pages/
+│       ├── home.html         ← Página de inicio
+│       ├── producto.html     ← Página CRUD Producto
+│       └── ...               ← Una página por tabla
+├── static/
+│   └── css/                  ← Estilos CSS personalizados
+└── venv/                     ← Entorno virtual Python (NO se sube a GitHub)
+```
+
+**Comparación con Blazor:**
+
+| Concepto | Blazor | Flask |
+|----------|--------|-------|
+| Lenguaje | C# | Python |
+| Archivo de página | `Producto.razor` (HTML + C# juntos) | `producto.py` (lógica) + `producto.html` (HTML separado) |
+| Servicio API | `Services/ApiService.cs` | `services/api_service.py` |
+| Layout | `MainLayout.razor` | `templates/layout/base.html` |
+| Menú | `NavMenu.razor` | `templates/components/nav_menu.html` |
+| Registro de rutas | `@page "/producto"` | `Blueprint + app.register_blueprint()` |
+| Configuración | `appsettings.json` + `Program.cs` | `config.py` + `app.py` |
+| Inyección de dependencias | `@inject ApiService Api` | `from services.api_service import ApiService` |
+| Punto de entrada | `dotnet run` | `python app.py` |
+
+### 2.4 Alcance
+
+- Frontend Flask con Python 3
+- 9 páginas CRUD (una por tabla)
+- 1 página de facturación con maestro-detalle (Stored Procedures)
+- Conexión a la API REST existente (ApiGenericaCsharp)
+- Menú de navegación lateral
+- Página de inicio con diagnóstico de conexión
+
+**Fuera del alcance:**
+- Autenticación / login
+- Reportes o dashboards
+- Despliegue en producción
+
+### 2.5 Objetivos
+
+1. Construir un frontend funcional en Flask que consuma la API genérica
+2. Practicar trabajo colaborativo con GitHub (ramas, PRs, merge)
+3. Aplicar el patrón de separación de responsabilidades (routes / services / templates)
+4. Implementar operaciones maestro-detalle con Stored Procedures
+
+### 2.6 Descripción de entregables
+
+| No. | Entregable | Descripción |
+|-----|-----------|-------------|
+| 1 | Proyecto Flask | Proyecto creado con estructura de carpetas, `venv`, `requirements.txt`, subido a GitHub |
+| 2 | api_service.py | Servicio Python que conecta el frontend con la API REST usando `requests` |
+| 3 | Layout y navegación | Template base con menú lateral + página Home |
+| 4 | CRUD Producto | Route + template con listar, crear, editar, eliminar |
+| 5 | CRUD Persona | Misma estructura que Producto, campos diferentes |
+| 6 | CRUD Usuario | Misma estructura, campo clave tipo password |
+| 7 | CRUD Empresa | Tabla simple, 2 campos |
+| 8 | CRUD Rol | Clave primaria `id` (int) en lugar de `codigo` (string) |
+| 9 | CRUD Cliente | Con llaves foráneas (selects a Persona y Empresa) |
+| 10 | CRUD Ruta | Clave primaria con nombre igual a la tabla |
+| 11 | CRUD Vendedor | Con llave foránea a Persona |
+| 12 | Factura | Página maestro-detalle con Stored Procedures |
+| 13 | NavMenu completo | Menú con links a todas las páginas |
+
+### 2.7 Metodología
+
+Se usa **Scrum adaptado** para un equipo de 3 personas:
+
+| Elemento Scrum | Adaptación para este proyecto |
+|----------------|-------------------------------|
+| Sprint | Cada paso del tutorial es un sprint (1-2 horas) |
+| Sprint Planning | Al inicio de cada paso, revisar qué hace cada estudiante |
+| Daily Standup | Comunicación breve antes de empezar a codificar |
+| Sprint Review | Verificar que la app corre (`python app.py`) después de cada merge |
+| Product Backlog | Lista de historias de usuario (sección 3) |
+| Sprint Backlog | Tareas asignadas por estudiante en cada sprint (sección 5) |
+
+**¿Por qué Scrum y no otra?**
+
+| Metodología | ¿Aplica aquí? | Razón |
+|-------------|---------------|-------|
+| Scrum | Sí (adaptado) | Sprints cortos, entregas incrementales, roles claros |
+| Kanban | Parcialmente | Bueno para visualizar tareas, pero no tiene sprints |
+| RUP | No | Demasiado formal para un proyecto de 3 personas |
+| Cascada | No | No permite cambios durante el desarrollo |
+| Prototipos | Parcialmente | Cada CRUD es un prototipo funcional |
+| Híbrido | Sí | Scrum + elementos de Kanban es lo más práctico |
+
+### 2.8 Roles
+
+| Rol Scrum | Quién | Responsabilidades en GitHub |
+|-----------|-------|----------------------------|
+| Product Owner | Profesor / Tutor | Define qué se construye, prioriza historias |
+| Scrum Master | Estudiante 1 | Administra el repo, revisa PRs, hace merge, resuelve conflictos |
+| Desarrollador | Estudiante 1 | Trabaja en sus ramas, crea PRs |
+| Desarrollador | Estudiante 2 | Trabaja en sus ramas, crea PRs |
+| Desarrollador | Estudiante 3 | Trabaja en sus ramas, crea PRs |
+
+---
+
+## 3. Historias de usuario
+
+### HU-01: Configuración del proyecto
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 1 |
+| **Nombre** | Configuración inicial del proyecto Flask |
+| **Usuario** | Profesor (Product Owner) |
+| **Prioridad** | Alta |
+| **Riesgo** | Bajo |
+| **Horas estimadas** | 2 |
+| **Iteración** | Sprint 1 (Pasos 1-3) |
+| **Responsable** | Estudiante 1 |
+
+**Descripción:**
+Yo como profesor, quiero que el equipo cree un proyecto Flask con su entorno virtual, estructura de carpetas (`routes/`, `services/`, `templates/`), lo suba a GitHub y configure el repositorio con los 3 estudiantes como colaboradores.
+
+**Criterios de aceptación:**
+- El proyecto se ejecuta con `python app.py` y muestra una página en `http://localhost:5100`
+- El repositorio está en GitHub con los 3 estudiantes como colaboradores
+- La branch `main` está protegida (solo se puede integrar por PR)
+- Cada estudiante puede clonar, crear `venv`, instalar dependencias y ejecutar
+- El `.gitignore` excluye `venv/`, `__pycache__/` y archivos `.pyc`
+
+---
+
+### HU-02: Conexión con la API
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 2 |
+| **Nombre** | Servicio de conexión con la API REST |
+| **Usuario** | Profesor (Product Owner) |
+| **Prioridad** | Alta |
+| **Riesgo** | Medio |
+| **Horas estimadas** | 3 |
+| **Iteración** | Sprint 2 (Paso 4) |
+| **Responsable** | Estudiante 1 |
+
+**Descripción:**
+Yo como profesor, quiero que el frontend se conecte a la API `ApiGenericaCsharp` que corre en `localhost:5035`, para poder listar, crear, editar y eliminar registros de cualquier tabla.
+
+**Criterios de aceptación:**
+- Existe `services/api_service.py` con clase `ApiService`
+- Métodos: `listar(tabla)`, `crear(tabla, datos)`, `actualizar(tabla, clave, valor, datos)`, `eliminar(tabla, clave, valor)`
+- La URL de la API se configura en `config.py`
+- Usa la librería `requests` para las peticiones HTTP
+
+---
+
+### HU-03: Layout y navegación
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 3 |
+| **Nombre** | Layout, menú de navegación y página Home |
+| **Usuario** | Profesor (Product Owner) |
+| **Prioridad** | Alta |
+| **Riesgo** | Bajo |
+| **Horas estimadas** | 2 |
+| **Iteración** | Sprint 2 (Paso 5) |
+| **Responsable** | Estudiante 1 |
+
+**Descripción:**
+Yo como profesor, quiero que la aplicación tenga un template base con menú lateral (links a todas las tablas), una página Home con info de conexión a la BD, y que todas las páginas hereden del layout base.
+
+**Criterios de aceptación:**
+- Existe `templates/layout/base.html` con estructura Bootstrap y bloque `{% block content %}`
+- Existe `templates/components/nav_menu.html` con links a todas las tablas
+- La página Home muestra proveedor, base de datos y versión
+- Existe `routes/home.py` con Blueprint registrado en `app.py`
+
+---
+
+### HU-04: CRUD Producto
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 4 |
+| **Nombre** | Gestión de productos |
+| **Usuario** | Profesor (Product Owner) |
+| **Prioridad** | Alta |
+| **Riesgo** | Bajo |
+| **Horas estimadas** | 3 |
+| **Iteración** | Sprint 3 (Paso 6) |
+| **Responsable** | Estudiante 1 |
+| **Rama** | `feature/crud-producto` |
+
+**Descripción:**
+Yo como profesor, quiero poder gestionar los productos (listar, crear, editar y eliminar) desde una página web, para verificar que la conexión con la API funciona correctamente.
+
+**Criterios de aceptación:**
+- Existe `routes/producto.py` con Blueprint y rutas: `/producto`, `/producto/crear`, `/producto/editar/<codigo>`, `/producto/eliminar/<codigo>`
+- Existe `templates/pages/producto.html` con tabla de productos y formulario
+- Puedo crear un producto nuevo con código, nombre, stock y valor unitario
+- Puedo editar un producto existente (el código no se puede cambiar)
+- Al eliminar, se muestra confirmación con JavaScript
+- Se muestra mensaje flash de éxito o error
+
+---
+
+### HU-05: CRUD Persona
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 5 |
+| **Nombre** | Gestión de personas |
+| **Prioridad** | Media |
+| **Horas estimadas** | 2 |
+| **Iteración** | Sprint 4 (Paso 7) |
+| **Responsable** | Estudiante 2 |
+| **Rama** | `feature/crud-persona` |
+
+**Descripción:**
+Yo como profesor, quiero poder gestionar las personas desde `/persona`.
+
+**Criterios de aceptación:**
+- Campos: codigo, nombre, email, telefono
+- Misma estructura visual que Producto
+- Confirmación antes de eliminar y actualizar
+
+---
+
+### HU-06: CRUD Usuario
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 6 |
+| **Nombre** | Gestión de usuarios |
+| **Prioridad** | Media |
+| **Horas estimadas** | 2 |
+| **Iteración** | Sprint 4 (Paso 7) |
+| **Responsable** | Estudiante 3 |
+| **Rama** | `feature/crud-usuario` |
+
+**Descripción:**
+Yo como profesor, quiero poder gestionar los usuarios desde `/usuario`. El campo clave debe mostrarse como password.
+
+**Criterios de aceptación:**
+- Campos: codigo, nombre, email, clave
+- El input de clave usa `type="password"`
+- Misma estructura que Producto
+
+---
+
+### HU-07: CRUD Empresa
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 7 |
+| **Nombre** | Gestión de empresas |
+| **Prioridad** | Media |
+| **Horas estimadas** | 1 |
+| **Iteración** | Sprint 5 (Paso 8) |
+| **Responsable** | Estudiante 1 |
+| **Rama** | `feature/crud-empresa` |
+
+**Descripción:**
+Tabla simple con solo codigo y nombre.
+
+**Criterios de aceptación:**
+- Campos: codigo, nombre
+- CRUD completo con confirmaciones
+
+---
+
+### HU-08: CRUD Rol
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 8 |
+| **Nombre** | Gestión de roles |
+| **Prioridad** | Media |
+| **Horas estimadas** | 1 |
+| **Iteración** | Sprint 5 (Paso 8) |
+| **Responsable** | Estudiante 3 |
+| **Rama** | `feature/crud-rol` |
+
+**Descripción:**
+La clave primaria es `id` (int), no `codigo` (string).
+
+**Criterios de aceptación:**
+- Campos: id (numérico), nombre
+- El input de id usa `type="number"`
+
+---
+
+### HU-09: CRUD Cliente (con llaves foráneas)
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 9 |
+| **Nombre** | Gestión de clientes |
+| **Prioridad** | Media |
+| **Horas estimadas** | 4 |
+| **Iteración** | Sprint 5 (Paso 8) |
+| **Responsable** | Estudiante 2 |
+| **Rama** | `feature/crud-cliente` |
+| **Depende de** | HU-05 (Persona), HU-07 (Empresa) |
+
+**Descripción:**
+Cada cliente está asociado a una persona y opcionalmente a una empresa. Los campos FK deben mostrarse como selects (`<select>`) que cargan datos de las tablas persona y empresa.
+
+**Criterios de aceptación:**
+- Campos: id (auto), credito, persona (select), empresa (select opcional)
+- La ruta carga las listas de personas y empresas con `api.listar("persona")` y `api.listar("empresa")`
+- La tabla muestra nombres en lugar de códigos
+- El id no se envía al crear (lo genera la BD)
+
+---
+
+### HU-10: CRUD Ruta
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 10 |
+| **Nombre** | Gestión de rutas |
+| **Prioridad** | Baja |
+| **Horas estimadas** | 1 |
+| **Iteración** | Sprint 6 (Paso 9) |
+| **Responsable** | Estudiante 1 |
+| **Rama** | `feature/crud-ruta` |
+
+**Descripción:**
+La clave primaria se llama `ruta` (igual que la tabla).
+
+**Criterios de aceptación:**
+- Campos: ruta, descripcion
+
+---
+
+### HU-11: CRUD Vendedor
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 11 |
+| **Nombre** | Gestión de vendedores |
+| **Prioridad** | Media |
+| **Horas estimadas** | 3 |
+| **Iteración** | Sprint 6 (Paso 9) |
+| **Responsable** | Estudiante 2 |
+| **Rama** | `feature/crud-vendedor` |
+| **Depende de** | HU-05 (Persona) |
+
+**Descripción:**
+Cada vendedor está asociado a una persona.
+
+**Criterios de aceptación:**
+- Campos: id (auto), carnet (numérico), direccion, persona (select)
+- La tabla muestra el nombre de la persona
+
+---
+
+### HU-12: Menú completo
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 12 |
+| **Nombre** | Actualizar menú de navegación |
+| **Prioridad** | Baja |
+| **Horas estimadas** | 1 |
+| **Iteración** | Sprint 6 (Paso 9) |
+| **Responsable** | Estudiante 3 |
+| **Rama** | `feature/actualizar-navmenu` |
+
+**Descripción:**
+El menú lateral debe tener links a TODAS las páginas, incluyendo Cliente, Vendedor y Factura.
+
+**Criterios de aceptación:**
+- `nav_menu.html` tiene links a las 9 tablas + Home
+
+---
+
+### HU-13: Factura (maestro-detalle)
+
+| Campo | Valor |
+|-------|-------|
+| **Número** | 13 |
+| **Nombre** | Gestión de facturas con productos |
+| **Prioridad** | Alta |
+| **Horas estimadas** | 8 |
+| **Iteración** | Sprint 7 (Paso 10) |
+| **Responsable** | Estudiante 2 |
+| **Rama** | `feature/crud-factura` |
+| **Depende de** | HU-09 (Cliente), HU-11 (Vendedor) |
+
+**Descripción:**
+Cada factura tiene un cliente, un vendedor y una lista dinámica de productos con cantidades. Usa Stored Procedures a través de la API.
+
+**Criterios de aceptación:**
+- Listar facturas con número, cliente, vendedor, fecha, total
+- Ver detalle de una factura con sus productos
+- Crear factura seleccionando cliente, vendedor y agregando productos dinámicamente (JavaScript)
+- Editar y eliminar factura con confirmación
+- Usa endpoint `/api/procedimientos/ejecutarsp`
+
+---
+
+## 4. Reunión inicial del equipo
+
+Antes de empezar a codificar, el equipo debe reunirse para definir:
+
+### 4.1 Checklist de la reunión
+
+- [ ] **Clonar el repositorio** — verificar que los 3 pueden clonar, crear `venv`, instalar dependencias y ejecutar `python app.py`
+- [ ] **Acordar convenciones de ramas** — definir si usan `feature/`, `crud-`, u otro prefijo
+- [ ] **Acordar convenciones de commits** — definir formato de mensajes
+- [ ] **Revisar las historias de usuario** — entender qué hace cada uno
+- [ ] **Asignar historias a cada sprint** — ver el cronograma (sección 5)
+- [ ] **Definir flujo de PRs** — quién revisa, quién aprueba, quién hace merge
+- [ ] **Definir canal de comunicación** — WhatsApp, Discord, Teams, etc.
+- [ ] **Definir horario de trabajo** — cuándo se conectan, cuándo se reúnen
+
+### 4.2 Preguntas que debe responder la reunión
+
+| Pregunta | Ejemplo de respuesta |
+|----------|---------------------|
+| ¿Quién administra el repo? | Estudiante 1 |
+| ¿Quién revisa los PRs? | Estudiante 1 revisa los de 2 y 3. Estudiante 2 o 3 revisan los de 1 |
+| ¿Qué pasa si hay conflicto? | Se resuelve en GitHub o se pide ayuda al Scrum Master |
+| ¿Cómo nos avisamos que un PR está listo? | Mensaje en el grupo de WhatsApp |
+| ¿Cada cuánto hacemos pull de main? | Antes de crear cada rama nueva |
+| ¿Qué hacemos si alguien se atrasa? | Se redistribuyen tareas en el siguiente sprint |
+
+---
+
+## 5. Cronograma por sprints
+
+| Sprint | Paso | Entregables | Est1 | Est2 | Est3 | Horas |
+|--------|------|-------------|------|------|------|-------|
+| **Sprint 1** | 1-3 | Proyecto + GitHub + ramas | Crear repo, invitar | Clonar, crear rama | Clonar, crear rama | 3 |
+| **Sprint 2** | 4-5 | api_service + Layout + Home | api_service + Layout + Home | Pull y verificar | Pull y verificar | 4 |
+| **Sprint 3** | 6 | CRUD Producto | CRUD Producto + PR | Pull y verificar | Pull y verificar | 3 |
+| **Sprint 4** | 7 | CRUD Persona + Usuario | Revisar PRs + merge | CRUD Persona + PR | CRUD Usuario + PR | 4 |
+| **Sprint 5** | 8 | CRUD Empresa + Cliente + Rol | CRUD Empresa + PR | CRUD Cliente + PR | CRUD Rol + PR | 6 |
+| **Sprint 6** | 9 | CRUD Ruta + Vendedor + NavMenu | CRUD Ruta + PR | CRUD Vendedor + PR | NavMenu + PR | 4 |
+| **Sprint 7** | 10 | Factura + Home | Home actualizado + PR | CRUD Factura + PR | Revisar + verificar | 6 |
+| | | | | | **Total estimado:** | **30** |
+
+### Distribución de carga por estudiante
+
+| Estudiante | Historias asignadas | Horas estimadas |
+|------------|-------------------|-----------------|
+| Estudiante 1 | HU-01, HU-02, HU-03, HU-04, HU-07, HU-10 | 12 |
+| Estudiante 2 | HU-05, HU-09, HU-11, HU-13 | 17 |
+| Estudiante 3 | HU-06, HU-08, HU-12 + Home | 6 |
+
+**Nota:** Estudiante 1 tiene más historias pero son más simples. Estudiante 2 tiene menos historias pero más complejas (llaves foráneas, factura). Estudiante 3 tiene menos carga y puede apoyar en revisión de PRs y pruebas.
+
+---
+
+## 6. Sprint Backlog — Tareas por desarrollador
+
+### Sprint 4 (ejemplo detallado)
+
+| Tarea | Responsable | Rama | Estado | Depende de |
+|-------|-------------|------|--------|------------|
+| Crear `routes/persona.py` | Estudiante 2 | `feature/crud-persona` | Pendiente | Sprint 3 mergeado |
+| Crear `templates/pages/persona.html` | Estudiante 2 | `feature/crud-persona` | Pendiente | Sprint 3 mergeado |
+| Registrar Blueprint en `app.py` | Estudiante 2 | `feature/crud-persona` | Pendiente | persona.py |
+| Crear `routes/usuario.py` | Estudiante 3 | `feature/crud-usuario` | Pendiente | Sprint 3 mergeado |
+| Crear `templates/pages/usuario.html` | Estudiante 3 | `feature/crud-usuario` | Pendiente | Sprint 3 mergeado |
+| Registrar Blueprint en `app.py` | Estudiante 3 | `feature/crud-usuario` | Pendiente | usuario.py |
+| Commit + push Persona | Estudiante 2 | `feature/crud-persona` | Pendiente | Archivos creados |
+| Commit + push Usuario | Estudiante 3 | `feature/crud-usuario` | Pendiente | Archivos creados |
+| Crear PR Persona | Estudiante 2 | - | Pendiente | Push |
+| Crear PR Usuario | Estudiante 3 | - | Pendiente | Push |
+| Revisar y merge ambos PRs | Estudiante 1 | - | Pendiente | PRs creados |
+| Pull de main (los 3) | Todos | - | Pendiente | Merges |
+
+### Sprint 5 (ejemplo con dependencias)
+
+| Tarea | Responsable | Rama | Estado | Depende de |
+|-------|-------------|------|--------|------------|
+| Crear CRUD Empresa | Estudiante 1 | `feature/crud-empresa` | Pendiente | - |
+| Crear CRUD Rol | Estudiante 3 | `feature/crud-rol` | Pendiente | - |
+| Crear CRUD Cliente | Estudiante 2 | `feature/crud-cliente` | Pendiente | **Empresa mergeado** |
+| PR + merge Empresa | Estudiante 1 | - | Pendiente | Empresa creado |
+| PR + merge Rol | Estudiante 1 | - | Pendiente | Rol creado |
+| fetch + merge origin/main | Estudiante 2 | `feature/crud-cliente` | Pendiente | Empresa mergeado |
+| PR + merge Cliente | Estudiante 1 | - | Pendiente | Cliente creado |
+
+**Notar:** Cliente depende de Empresa. Estudiante 2 debe esperar a que Empresa esté mergeado, luego hacer `git fetch origin && git merge origin/main` en su rama antes de subir su PR.
+
+---
+
+## 7. Resumen de convenciones acordadas
+
+Este es un ejemplo de lo que el equipo debe definir en la reunión inicial:
+
+| Convención | Acuerdo |
+|------------|---------|
+| **Prefijo de ramas** | `feature/`, `fix/`, `docs/` |
+| **Formato de commit** | `tipo: descripción` (feat, fix, docs, refactor) |
+| **Quién hace merge** | Estudiante 1 (Scrum Master) |
+| **Quién revisa PRs** | Est1 revisa los de Est2 y Est3. Est2 o Est3 revisan los de Est1 |
+| **Canal de comunicación** | Grupo de WhatsApp |
+| **Cuándo hacer pull** | Siempre antes de crear una rama nueva |
+| **Qué hacer si hay conflicto** | Resolverlo en GitHub o pedir ayuda |
+| **Cuándo se reúnen** | Al inicio de cada sprint (cada paso del tutorial) |
+| **Entorno virtual** | Cada quien crea su propio `venv` local (NO se sube a GitHub) |
+
+---
+
+> **Siguiente paso:** Paso 1 — Conceptos Básicos de Flask.
