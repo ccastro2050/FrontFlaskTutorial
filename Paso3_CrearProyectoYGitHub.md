@@ -199,6 +199,34 @@ git branch -M main                   # renombra la rama principal a "main"
 git push -u origin main              # sube el código a GitHub por primera vez
 ```
 
+### C3.1 Proteger la rama main
+
+Proteger `main` significa que **nadie puede hacer push directo** a main — ni siquiera el dueño del repositorio. Todo cambio debe entrar por Pull Request aprobado. Esto evita que alguien suba código sin revisión.
+
+**¿Qué pasa cuando se protege?**
+- `git push origin main` falla — GitHub lo rechaza
+- Solo se puede integrar código creando un PR y haciendo merge
+- Se puede exigir que al menos 1 persona apruebe antes del merge
+
+**¿Por qué se hace después del primer push?** Porque el primer push (`git push -u origin main`) necesita subir el proyecto inicial directamente. Después de eso, todo cambio va por PR.
+
+**¿Aplica también para el dueño?** Sí. Con Branch Ruleset aplica para todos, incluyendo el dueño. Esto es lo recomendado para aprender — así todos están obligados a usar PRs. Si se necesita desactivar temporalmente, se puede hacer desde Settings.
+
+**Pasos para proteger:**
+
+1. Ir al repositorio en GitHub
+2. Clic en **Settings** (pestaña superior)
+3. En el menú izquierdo: **Rules** → **Rulesets**
+4. Clic en **New ruleset** → **New branch ruleset**
+5. **Ruleset Name:** `proteger-main`
+6. **Enforcement status:** cambiar de `Disabled` a **Active**
+7. En **Target branches:** clic en **Add target** → **Include by pattern** → escribir `main` → **Add**
+8. En la sección **Rules**, marcar **Require a pull request before merging**
+9. Dentro de esa opción, marcar **Require approvals** → dejar en **1**
+10. Clic en **Create** (botón verde abajo)
+
+A partir de este momento, nadie puede hacer `git push origin main` directamente. Todo debe ir por Pull Request.
+
 ### C4. Invitar a Estudiante 2 y Estudiante 3
 
 1. Ir al repositorio en GitHub: `https://github.com/TU_USUARIO/FrontFlaskTutorial`
