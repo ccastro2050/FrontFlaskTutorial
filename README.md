@@ -16,7 +16,8 @@ El frontend **no accede directamente a la base de datos**. Toda la comunicación
 ┌──────────────┐       HTTP        ┌────────────────────┐       SQL        ┌──────────────┐
 │   Frontend   │  ←────────────→   │   API REST (C#)    │  ←────────────→  │  Base de     │
 │   Flask      │  GET/POST/PUT/DEL │  ApiGenericaCsharp  │  Queries/SPs    │  Datos       │
-│   Puerto 5300│                   │  Puerto 5035       │                  │  SQL Server  │
+│   Puerto 5300│                   │  Puerto 5035       │                  │  (la que use │
+│              │                   │                    │                  │   la API)    │
 └──────────────┘                   └────────────────────┘                  └──────────────┘
 ```
 
@@ -214,7 +215,7 @@ Esto es diferente a Blazor (1 archivo .razor) y React (1 archivo .jsx), donde la
 
 - **Python 3.8+** instalado
 - **API REST** (`ApiGenericaCsharp`) corriendo en `http://localhost:5035`
-- **Base de datos** SQL Server con las tablas de facturación creadas
+- **Base de datos** SQL Server, PostgreSQL, MySQL u otra con las tablas de facturación creadas
 - **Git** instalado
 
 ---
