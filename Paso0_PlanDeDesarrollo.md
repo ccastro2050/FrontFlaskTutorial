@@ -46,8 +46,13 @@ feature/crud-usuario           ← Estudiante 3
 feature/layout-navegacion      ← Estudiante 1
 feature/crud-factura           ← Estudiante 2
 docs/actualizar-readme         ← Estudiante 3
-fix/error-select-empresa       ← quien lo detecte
+fix/error-select-empresa       ← quien lo detecte (corrección de bug)
+fix/api-timeout                ← quien lo detecte (corrección de bug)
+refactor/extraer-servicio      ← mejora de código sin cambiar funcionalidad
+docs/actualizar-readme         ← Estudiante 3 (documentación)
 ```
+
+> **Nota:** El prefijo de la rama coincide con el tipo del commit. Si la rama es `feature/crud-producto`, los commits dentro de esa rama empiezan con `feat:`. Si la rama es `fix/error-select`, los commits empiezan con `fix:`.
 
 ### 1.3 Convenciones para mensajes de commit
 
@@ -56,25 +61,30 @@ Usar mensajes claros que digan **qué** se hizo:
 **Formato recomendado:**
 ```
 tipo: descripción corta
-
-Ejemplos:
-feat: agregar ruta y template CRUD Producto
-feat: agregar api_service.py para conexión con API
-fix: corregir error en select de empresas vacío
-refactor: extraer lógica de parseo a función separada
-docs: agregar manual de instalación
-style: corregir indentación en producto.html
 ```
 
 **Tipos comunes:**
-| Tipo | Significado |
-|------|-------------|
-| `feat` | Nueva funcionalidad |
-| `fix` | Corrección de error |
-| `docs` | Documentación |
-| `style` | Formato (no cambia lógica) |
-| `refactor` | Reestructuración de código |
-| `test` | Agregar o modificar pruebas |
+| Tipo | Significado | Ejemplo |
+|------|-------------|---------|
+| `feat` | Nueva funcionalidad | `feat: agregar ruta y template CRUD Producto` |
+| `fix` | Corrección de error | `fix: corregir error en select de empresas vacío` |
+| `docs` | Documentación | `docs: agregar manual de instalación` |
+| `style` | Formato (no cambia lógica) | `style: corregir indentación en producto.html` |
+| `refactor` | Reestructuración de código | `refactor: extraer lógica de parseo a función separada` |
+| `test` | Agregar o modificar pruebas | `test: agregar pruebas para api_service` |
+
+**Más ejemplos adaptados a Flask:**
+```
+feat: agregar api_service.py para conexión con API
+feat: agregar layout base y nav_menu.html
+feat: agregar ruta y template CRUD Persona
+feat: agregar página Factura con stored procedures
+fix: corregir requests.post que no enviaba JSON
+fix: corregir flash message que no aparecía
+refactor: extraer lógica de parseo a función separada
+style: aplicar formato consistente en imports de app.py
+docs: actualizar README con instrucciones de instalación
+```
 
 ### 1.4 Convenciones para Pull Requests
 
