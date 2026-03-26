@@ -77,7 +77,7 @@ git push -u origin main                                           # subir a GitH
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b api-service                # crear rama para el ApiService
 
 # --- Crear services/api_service.py ---
@@ -91,7 +91,7 @@ git checkout -b api-service                # crear rama para el ApiService
 # --- Verificar y subir ---
 python -c "from services.api_service import ApiService; print('OK')"  # verificar que importa
 git add .                                  # agregar cambios al staging
-git commit -m "Agregar ApiService y configurar conexion a la API"     # commit
+git commit -m "Agregar ApiService y configurar conexión a la API"     # commit
 git push -u origin api-service             # subir rama a GitHub
 
 # --- En GitHub: crear PR api-service -> main, aprobar y merge ---
@@ -107,7 +107,7 @@ git push -u origin api-service             # subir rama a GitHub
 - `static/css/app.css` (NUEVO) — estilos del sidebar y responsive
 - `templates/layout/base.html` (NUEVO) — template base con sidebar + contenido
 - `templates/components/nav_menu.html` (NUEVO) — menu lateral
-- `templates/pages/home.html` (NUEVO) — pagina de inicio con diagnostico
+- `templates/pages/home.html` (NUEVO) — página de inicio con diagnostico
 - `routes/home.py` (NUEVO) — Blueprint de Home
 
 **Archivos modificados:**
@@ -115,13 +115,13 @@ git push -u origin api-service             # subir rama a GitHub
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b layout-navegacion-home     # crear rama para layout y home
 
 # --- Crear los archivos de layout, menu, home y CSS ---
 # base.html: estructura HTML con Bootstrap, sidebar, mensajes flash, bloque content
 # nav_menu.html: links a Home, Producto, Persona, Usuario, Empresa, Rol, Ruta
-# home.html: titulo, tablas disponibles, info de conexion a la BD
+# home.html: titulo, tablas disponibles, info de conexión a la BD
 # home.py: Blueprint con ruta GET / que consulta diagnostico de la API
 # app.css: estilos del sidebar, responsive, iconos SVG
 
@@ -132,7 +132,7 @@ git checkout -b layout-navegacion-home     # crear rama para layout y home
 # --- Verificar y subir ---
 python app.py                              # verificar que funciona en http://localhost:5300
 git add .                                  # agregar cambios
-git commit -m "Configurar layout, navegacion y pagina Home"       # commit
+git commit -m "Configurar layout, navegacion y página Home"       # commit
 git push -u origin layout-navegacion-home  # subir rama
 
 # --- En GitHub: crear PR layout-navegacion-home -> main, aprobar y merge ---
@@ -153,7 +153,7 @@ git push -u origin layout-navegacion-home  # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-producto              # crear rama para CRUD Producto
 
 # --- Crear routes/producto.py ---
@@ -172,7 +172,7 @@ git checkout -b crud-producto              # crear rama para CRUD Producto
 # --- Verificar y subir ---
 python app.py                              # verificar en http://localhost:5300/producto
 git add .                                  # agregar cambios
-git commit -m "Agregar pagina CRUD Producto"                      # commit
+git commit -m "Agregar página CRUD Producto"                      # commit
 git push -u origin crud-producto           # subir rama
 
 # --- En GitHub: crear PR crud-producto -> main, aprobar y merge ---
@@ -193,12 +193,12 @@ git push -u origin crud-producto           # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-empresa               # crear rama para CRUD Empresa
 
 # --- Crear routes/empresa.py y templates/pages/empresa.html ---
 # Tabla simple con 2 campos: codigo (str), nombre (str)
-# Misma estructura que Producto pero mas sencilla
+# Misma estructura que Producto pero más sencilla
 
 # --- Verificar y subir ---
 git add .                                  # agregar cambios
@@ -224,11 +224,11 @@ git push -u origin crud-empresa            # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-ruta                  # crear rama para CRUD Ruta
 
 # --- Crear routes/ruta.py y templates/pages/ruta.html ---
-# Campos: ruta (str, PK), descripcion (str)
+# Campos: ruta (str, PK), descripción (str)
 # Blueprint se llama 'ruta_page' (no 'ruta') para no confundir con el campo
 # En templates se usa url_for('ruta_page.index')
 
@@ -251,7 +251,7 @@ git push -u origin crud-ruta               # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b agregar-ejecutar-sp        # crear rama para ejecutar_sp
 
 # --- Modificar services/api_service.py ---
@@ -272,7 +272,7 @@ git push -u origin agregar-ejecutar-sp     # subir rama
 
 ## Estudiante 2
 
-Estudiante 2 se enfoca en las tablas que tienen llaves foraneas y la factura (la pagina mas compleja).
+Estudiante 2 se enfoca en las tablas que tienen llaves foraneas y la factura (la página más compleja).
 
 ---
 
@@ -311,7 +311,7 @@ python app.py                                                      # verificar q
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-persona               # crear rama para CRUD Persona
 
 # --- Crear routes/persona.py y templates/pages/persona.html ---
@@ -348,7 +348,7 @@ git push -u origin crud-persona            # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-cliente               # crear rama para CRUD Cliente
 
 # --- Crear routes/cliente.py ---
@@ -387,7 +387,7 @@ git push -u origin crud-cliente            # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-vendedor              # crear rama para CRUD Vendedor
 
 # --- Crear routes/vendedor.py y templates/pages/vendedor.html ---
@@ -419,10 +419,10 @@ git push -u origin crud-vendedor           # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-factura               # crear rama para Factura
 
-# --- Si ejecutar_sp se mergeo despues de crear la rama ---
+# --- Si ejecutar_sp se mergeo después de crear la rama ---
 git fetch origin                           # descargar cambios de GitHub sin aplicarlos
 git merge origin/main                      # traer ejecutar_sp a esta rama
 
@@ -443,7 +443,7 @@ git merge origin/main                      # traer ejecutar_sp a esta rama
 
 # --- Verificar y subir ---
 git add .                                  # agregar cambios
-git commit -m "Agregar pagina Factura con stored procedures"      # commit
+git commit -m "Agregar página Factura con stored procedures"      # commit
 git push -u origin crud-factura            # subir rama
 
 # --- En GitHub: crear PR crud-factura -> main ---
@@ -453,7 +453,7 @@ git push -u origin crud-factura            # subir rama
 
 ## Estudiante 3
 
-Estudiante 3 trabaja en las tablas mas simples y en tareas de soporte (NavMenu, Home).
+Estudiante 3 trabaja en las tablas más simples y en tareas de soporte (NavMenu, Home).
 
 ---
 
@@ -492,7 +492,7 @@ python app.py                                                      # verificar q
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-usuario               # crear rama para CRUD Usuario
 
 # --- Crear routes/usuario.py y templates/pages/usuario.html ---
@@ -523,7 +523,7 @@ git push -u origin crud-usuario            # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b crud-rol                   # crear rama para CRUD Rol
 
 # --- Crear routes/rol.py y templates/pages/rol.html ---
@@ -550,8 +550,8 @@ git push -u origin crud-rol                # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
-git checkout -b actualizar-navmenu         # crear rama para actualizar el menu
+git pull                                   # descargar últimos cambios
+git checkout -b actualizar-navmenu         # crear rama para actualizar el menú
 
 # --- Modificar templates/components/nav_menu.html ---
 # Agregar links a: Cliente, Vendedor, Facturas
@@ -575,7 +575,7 @@ git push -u origin actualizar-navmenu      # subir rama
 
 ```powershell
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b actualizar-home            # crear rama para actualizar Home
 
 # --- Modificar templates/pages/home.html ---
@@ -596,7 +596,7 @@ git push -u origin actualizar-home         # subir rama
 
 | # | Sprint | Paso | Rama | Descripcion | Responsable | Depende de |
 |---|--------|------|------|-------------|-------------|------------|
-| 1 | Sprint 2 | 4 | `api-service` | ApiService + conexion a la API | Est1 | - |
+| 1 | Sprint 2 | 4 | `api-service` | ApiService + conexión a la API | Est1 | - |
 | 2 | Sprint 2 | 5 | `layout-navegacion-home` | Layout, NavMenu y Home | Est1 | PR #1 |
 | 3 | Sprint 3 | 6 | `crud-producto` | CRUD Producto | Est1 | PR #2 |
 | 4 | Sprint 4 | 7 | `crud-persona` | CRUD Persona | Est2 | PR #3 |
@@ -628,7 +628,7 @@ FrontFlaskTutorial/
 │   └── api_service.py                  ← Est1 (Paso 4, 10) - CRUD generico + ejecutar_sp
 ├── routes/
 │   ├── __init__.py                     ← Est1 (Paso 3)
-│   ├── home.py                         ← Est1 (Paso 5) - Blueprint pagina inicio
+│   ├── home.py                         ← Est1 (Paso 5) - Blueprint página inicio
 │   ├── producto.py                     ← Est1 (Paso 6) - Blueprint CRUD Producto
 │   ├── persona.py                      ← Est2 (Paso 7) - Blueprint CRUD Persona
 │   ├── usuario.py                      ← Est3 (Paso 7) - Blueprint CRUD Usuario
@@ -644,7 +644,7 @@ FrontFlaskTutorial/
 │   ├── components/
 │   │   └── nav_menu.html               ← Est1 (Paso 5) + Est3 (Paso 9) - menu lateral
 │   └── pages/
-│       ├── home.html                   ← Est1 (Paso 5) + Est3 (Paso 10) - pagina inicio
+│       ├── home.html                   ← Est1 (Paso 5) + Est3 (Paso 10) - página inicio
 │       ├── producto.html               ← Est1 (Paso 6) - CRUD Producto
 │       ├── persona.html                ← Est2 (Paso 7) - CRUD Persona
 │       ├── usuario.html                ← Est3 (Paso 7) - CRUD Usuario
@@ -691,12 +691,12 @@ FrontFlaskTutorial/
 ```powershell
 # --- Comandos que se usan SIEMPRE antes de empezar una tarea nueva ---
 git checkout main                          # volver a la rama principal
-git pull                                   # descargar ultimos cambios
+git pull                                   # descargar últimos cambios
 git checkout -b nombre-rama                # crear rama nueva para la tarea
 
 # --- Comandos que se usan AL TERMINAR una tarea ---
 git add .                                  # agregar todos los cambios
-git commit -m "descripcion del cambio"     # crear commit con mensaje descriptivo
+git commit -m "descripción del cambio"     # crear commit con mensaje descriptivo
 git push -u origin nombre-rama             # subir rama a GitHub
 # Luego: crear PR en GitHub, pedir revision, merge
 
@@ -706,7 +706,7 @@ git merge origin/main                      # aplicar cambios de main a la rama a
 
 # --- Comandos de consulta ---
 git status                                 # ver estado actual (archivos modificados, rama)
-git log --oneline -10                      # ver ultimos 10 commits
+git log --oneline -10                      # ver últimos 10 commits
 git branch                                 # ver ramas locales
 git branch -a                              # ver todas las ramas (locales y remotas)
 git diff                                   # ver cambios no agregados al staging
@@ -718,7 +718,7 @@ git diff                                   # ver cambios no agregados al staging
 
 | Concepto | Flask (Python) | Blazor (C#) |
 |----------|---------------|-------------|
-| Archivo de pagina | `routes/producto.py` + `templates/pages/producto.html` | `Components/Pages/Producto.razor` |
+| Archivo de página | `routes/producto.py` + `templates/pages/producto.html` | `Components/Pages/Producto.razor` |
 | Servicio API | `services/api_service.py` | `Services/ApiService.cs` |
 | Layout | `templates/layout/base.html` | `Components/Layout/MainLayout.razor` |
 | Menu | `templates/components/nav_menu.html` | `Components/Layout/NavMenu.razor` |

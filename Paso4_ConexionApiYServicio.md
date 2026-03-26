@@ -73,7 +73,7 @@ class ApiService:
             return (respuesta.ok, mensaje)
 
         except requests.RequestException as ex:
-            return (False, f"Error de conexion: {ex}")
+            return (False, f"Error de conexión: {ex}")
 
     # ──────────────────────────────────────────────
     # ACTUALIZAR: PUT /api/{tabla}/{clave}/{valor}
@@ -87,7 +87,7 @@ class ApiService:
             return (respuesta.ok, mensaje)
 
         except requests.RequestException as ex:
-            return (False, f"Error de conexion: {ex}")
+            return (False, f"Error de conexión: {ex}")
 
     # ──────────────────────────────────────────────
     # ELIMINAR: DELETE /api/{tabla}/{clave}/{valor}
@@ -101,7 +101,7 @@ class ApiService:
             return (respuesta.ok, mensaje)
 
         except requests.RequestException as ex:
-            return (False, f"Error de conexion: {ex}")
+            return (False, f"Error de conexión: {ex}")
 ```
 
 ### ¿Qué hace cada parte?
@@ -144,7 +144,7 @@ python -c "from services.api_service import ApiService; print('ApiService OK')" 
 
 ```powershell
 git add .                                    # agrega archivos al staging
-git commit -m "Agregar ApiService y configurar conexion a la API"   # guarda cambios
+git commit -m "Agregar ApiService y configurar conexión a la API"   # guarda cambios
 git push -u origin api-service               # sube la rama a GitHub
 ```
 
