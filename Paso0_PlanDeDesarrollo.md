@@ -110,11 +110,55 @@ Descripción:
 5. git add .
 6. git commit -m "feat: descripción"
 7. git push -u origin feature/mi-tarea
-8. Crear PR en GitHub
-9. Otro miembro revisa y aprueba
-10. Merge a main
-11. Borrar la rama
+8. Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request")
+9. Estudiante 1 revisa y hace merge
+10. Borrar la rama
 ```
+
+### 1.6 Aclaraciones importantes sobre Pull Requests
+
+> **¿Qué es un Pull Request (PR)?** Es una solicitud para integrar los cambios de una rama a `main`. En vez de meter código directo a `main`, el PR permite:
+> - Ver exactamente qué archivos cambiaron (línea por línea)
+> - Que el dueño del repositorio (Estudiante 1) revise el código antes de integrarlo
+> - Tener un historial de qué se integró, cuándo y quién lo hizo
+>
+> **¿Quién crea el PR?** Lo crea quien hizo el push, porque GitHub le muestra un botón amarillo solo a esa persona. Si Estudiante 1 hizo push, Estudiante 1 crea el PR. Si Estudiante 2 o 3 hicieron push, ellos crean el PR.
+>
+> **¿Quién hace merge?** Solo Estudiante 1, porque es el dueño del repositorio y de la rama `main`.
+>
+> **¿Qué pasa si Estudiante 1 no acepta el PR?** El código se queda en la rama pero no entra a `main`. El PR queda abierto en GitHub esperando. Estudiante 1 puede escribir un comentario explicando qué hay que corregir, y el estudiante que hizo el push puede hacer más commits en la misma rama para arreglar el problema. Cuando Estudiante 1 esté conforme, hace merge.
+>
+> **¿Qué pasa si el estudiante no crea el PR después de hacer push?** La rama queda subida en GitHub pero nadie la revisa. El código no entra a `main` y los demás compañeros no pueden usar esos cambios. Sin PR, es como si el trabajo no existiera para el equipo.
+
+### 1.7 Paso a paso: crear un PR en GitHub
+
+1. Ir al repositorio en GitHub
+
+2. GitHub muestra un banner amarillo que dice algo como: **"feature/mi-tarea had recent pushes"** con un botón **Compare & pull request**.
+
+> Ese banner aparece porque GitHub detectó que alguien acaba de subir una rama nueva. "Recent pushes" significa "subidas recientes". El botón **Compare & pull request** significa: "comparar los cambios de esa rama contra `main` y crear una solicitud para integrarlos". Hacer clic en ese botón.
+
+3. Si no aparece el banner (puede pasar si pasó mucho tiempo desde el push): ir a la pestaña **Pull requests** (arriba en el repositorio) → **New pull request** → en el dropdown "compare" seleccionar la rama. Esto hace lo mismo que el botón amarillo pero de forma manual.
+
+4. GitHub muestra un formulario. Llenar título y descripción del cambio.
+
+5. Hacer clic en **Create pull request**.
+
+> Esto NO integra los cambios todavía. Solo crea la solicitud. GitHub ahora muestra una página con el PR abierto donde se puede ver exactamente qué archivos cambiaron y qué líneas se agregaron o modificaron. Aquí es donde Estudiante 1 revisaría el código antes de aprobarlo.
+
+6. **Estudiante 1** revisa los cambios en la pestaña **Files changed**. Ahí se ven las líneas nuevas en verde y las eliminadas en rojo.
+
+7. Hacer clic en **Merge pull request**.
+
+> **¿Qué es merge?** Merge significa "fusionar". Al hacer clic, le estamos diciendo a GitHub: "toma todos los cambios de esa rama e intégralos a `main`". Después de esto, `main` tendrá el código nuevo.
+
+8. Hacer clic en **Confirm merge** para confirmar.
+
+9. GitHub muestra un botón **Delete branch**. Hacer clic.
+
+> Esto solo borra la rama en GitHub, no borra el código (el código ya está seguro en `main`). Es para no acumular ramas viejas que ya se integraron. Si no se borra, no pasa nada malo, solo queda una rama huérfana que ensucia la lista de ramas.
+
+10. **¿Y si después quiero ver qué hizo cada estudiante?** Aunque la rama se borró, el Pull Request queda guardado para siempre en GitHub. Ir a la pestaña **Pull requests** → **Closed** y ahí aparecen todos los PRs anteriores con el nombre de quien lo creó, la fecha, y todos los archivos que se cambiaron línea por línea.
 
 ---
 
@@ -481,7 +525,7 @@ Cada cliente está asociado a una persona y opcionalmente a una empresa. Los cam
 La clave primaria se llama `ruta` (igual que la tabla).
 
 **Criterios de aceptación:**
-- Campos: ruta, descripcion
+- Campos: ruta, descripción
 
 ---
 

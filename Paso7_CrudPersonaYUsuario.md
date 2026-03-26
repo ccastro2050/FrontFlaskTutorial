@@ -130,7 +130,7 @@ git commit -m "Agregar ruta y template CRUD Persona"   # guarda cambios
 git push -u origin crud-persona                    # sube la rama
 ```
 
-En GitHub: crear Pull Request `crud-persona` → `main`.
+Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-persona` → `main`. Si no aparece: pestaña **Pull requests** → **New pull request**.
 **Estudiante 1** revisa, aprueba y hace merge. Clic en **Delete branch**.
 
 ---
@@ -230,7 +230,7 @@ git commit -m "Agregar ruta y template CRUD Usuario"    # guarda cambios
 git push -u origin crud-usuario                     # sube la rama
 ```
 
-En GitHub: crear Pull Request `crud-usuario` → `main`.
+Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-usuario` → `main`. Si no aparece: pestaña **Pull requests** → **New pull request**.
 **Estudiante 1** revisa, aprueba y hace merge. Clic en **Delete branch**.
 
 ---

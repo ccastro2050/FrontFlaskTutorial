@@ -43,7 +43,7 @@ Y en los templates se usa `url_for('ruta_page.index')` en vez de `url_for('ruta.
 ### Archivos a crear
 
 - `routes/ruta.py` — Blueprint con CLAVE = 'ruta'
-- `templates/pages/ruta.html` — Template con campos ruta y descripcion
+- `templates/pages/ruta.html` — Template con campos ruta y descripción
 - Registrar en `app.py`:
   ```python
   from routes.ruta import bp as ruta_bp
@@ -58,7 +58,7 @@ git commit -m "Agregar ruta y template CRUD Ruta"  # guarda cambios
 git push -u origin crud-ruta                       # sube la rama
 ```
 
-En GitHub: crear PR `crud-ruta` → `main`, merge y Delete branch.
+Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-ruta` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** abre el PR, revisa en **Files changed**, hace **Merge pull request** → **Confirm merge**, y clic en **Delete branch**.
 
 ---
 
@@ -84,7 +84,7 @@ git commit -m "Agregar ruta y template CRUD Vendedor"  # guarda cambios
 git push -u origin crud-vendedor                       # sube la rama
 ```
 
-En GitHub: crear PR `crud-vendedor` → `main`, merge y Delete branch.
+Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-vendedor` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** abre el PR, revisa en **Files changed**, hace **Merge pull request** → **Confirm merge**, y clic en **Delete branch**.
 
 ---
 
@@ -124,7 +124,7 @@ git commit -m "Agregar links de Cliente, Vendedor y Factura al menu"   # guarda 
 git push -u origin actualizar-navmenu                                  # sube la rama
 ```
 
-En GitHub: crear PR `actualizar-navmenu` → `main`, merge y Delete branch.
+Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `actualizar-navmenu` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** abre el PR, revisa en **Files changed**, hace **Merge pull request** → **Confirm merge**, y clic en **Delete branch**.
 
 ---
 

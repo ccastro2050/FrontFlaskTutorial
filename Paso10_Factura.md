@@ -51,7 +51,7 @@ Agregar un nuevo método a `services/api_service.py` para ejecutar Stored Proced
             return (True, contenido)
 
         except requests.RequestException as ex:
-            return (False, f"Error de conexion: {ex}")
+            return (False, f"Error de conexión: {ex}")
         except Exception as ex:
             return (False, f"Error procesando respuesta: {ex}")
 ```
@@ -64,7 +64,7 @@ git commit -m "Agregar metodo ejecutar_sp a ApiService"        # guarda cambios
 git push -u origin agregar-ejecutar-sp                         # sube la rama
 ```
 
-En GitHub: PR → merge → Delete branch.
+Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request"). **Estudiante 1** revisa, hace **Merge pull request** → **Confirm merge** → **Delete branch**.
 
 ---
 
@@ -90,7 +90,7 @@ git commit -m "Actualizar Home con lista completa de tablas"       # guarda camb
 git push -u origin actualizar-home                                 # sube la rama
 ```
 
-En GitHub: PR → merge → Delete branch.
+Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request"). **Estudiante 1** revisa, hace **Merge pull request** → **Confirm merge** → **Delete branch**.
 
 ---
 
@@ -117,11 +117,11 @@ git merge origin/main       # aplica cambios de main a la rama actual
 
 ```powershell
 git add .                                                      # agrega archivos
-git commit -m "Agregar pagina Factura con stored procedures"   # guarda cambios
+git commit -m "Agregar página Factura con stored procedures"   # guarda cambios
 git push -u origin crud-factura                                # sube la rama
 ```
 
-En GitHub: PR → merge → Delete branch.
+Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request"). **Estudiante 1** revisa, hace **Merge pull request** → **Confirm merge** → **Delete branch**.
 
 ---
 

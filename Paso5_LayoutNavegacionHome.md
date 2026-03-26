@@ -165,7 +165,7 @@ La clase `active` se agrega automáticamente comparando `request.path` con la UR
     <div class="alert alert-info">
         <strong>Tablas disponibles:</strong> Producto, Persona, Usuario, Empresa, Rol, Ruta.
         <br />
-        Use el menu lateral para navegar a cada tabla.
+        Use el menú lateral para navegar a cada tabla.
     </div>
 
     {% if diagnostico and diagnostico.servidor %}
@@ -212,7 +212,7 @@ La clase `active` se agrega automáticamente comparando `request.path` con la UR
         </div>
     {% elif diagnostico is none %}
         <div class="mt-4">
-            <small class="text-muted">No se pudo obtener informacion de conexion de la API.</small>
+            <small class="text-muted">No se pudo obtener informacion de conexión de la API.</small>
         </div>
     {% endif %}
 
@@ -226,7 +226,7 @@ La clase `active` se agrega automáticamente comparando `request.path` con la UR
 
 ```python
 """
-home.py - Blueprint para la pagina de inicio.
+home.py - Blueprint para la página de inicio.
 """
 
 from flask import Blueprint, render_template
@@ -241,7 +241,7 @@ api = ApiService()
 def index():
     diagnostico = None
     try:
-        url = f"{api.base_url}/api/diagnostico/conexion"
+        url = f"{api.base_url}/api/diagnostico/conexión"
         respuesta = requests.get(url, timeout=3)
         if respuesta.ok:
             diagnostico = respuesta.json()
@@ -284,11 +284,11 @@ Abrir `http://localhost:5300` en el navegador. Debe mostrar la página Home con 
 
 ```powershell
 git add .                                                              # agrega archivos
-git commit -m "Configurar layout, navegacion y pagina Home"            # guarda cambios
+git commit -m "Configurar layout, navegacion y página Home"            # guarda cambios
 git push -u origin layout-navegacion-home                              # sube la rama
 ```
 
-En GitHub: crear Pull Request `layout-navegacion-home` → `main`, aprobar y hacer merge.
+Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `layout-navegacion-home` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** va a la pestaña **Pull requests**, abre el PR, revisa en **Files changed**, y hace **Merge pull request** → **Confirm merge**.
 
 Después del merge, **Estudiante 2 y Estudiante 3** actualizan:
 
