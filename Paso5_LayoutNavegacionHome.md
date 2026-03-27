@@ -280,7 +280,7 @@ Abrir `http://localhost:5300` en el navegador. Debe mostrar la página Home con 
 
 ---
 
-## 8. Subir cambios, PR y merge
+## 8. Subir cambios y merge
 
 ```powershell
 git add .                                                              # agrega archivos
@@ -288,7 +288,7 @@ git commit -m "Configurar layout, navegacion y página Home"            # guarda
 git push -u origin layout-navegacion-home                              # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `layout-navegacion-home` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** va a la pestaña **Pull requests**, abre el PR, revisa en **Files changed**, y hace **Merge pull request** → **Confirm merge**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 Después del merge, **Estudiante 2 y Estudiante 3** actualizan:
 

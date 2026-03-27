@@ -10,7 +10,7 @@ Este paso se divide en **3 tareas con dependencias**:
 | 2do | **Estudiante 3** | Actualizar Home con todas las tablas | `actualizar-home` | Nada |
 | 3ro | **Estudiante 2** | Crear `routes/factura.py` + `templates/pages/factura.html` | `crud-factura` | ejecutar_sp (Est1) |
 
-**Importante:** Estudiante 2 debe esperar a que el PR de Estudiante 1 esté mergeado antes de subir su PR.
+**Importante:** Estudiante 2 debe esperar a que Estudiante 1 fusione la rama de Estudiante 1 antes de subir sus cambios.
 
 ---
 
@@ -56,7 +56,7 @@ Agregar un nuevo método a `services/api_service.py` para ejecutar Stored Proced
             return (False, f"Error procesando respuesta: {ex}")
 ```
 
-### Subir cambios y crear PR
+### Subir cambios y merge
 
 ```powershell
 git add .                                                      # agrega archivos
@@ -64,7 +64,7 @@ git commit -m "Agregar metodo ejecutar_sp a ApiService"        # guarda cambios
 git push -u origin agregar-ejecutar-sp                         # sube la rama
 ```
 
-Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request"). **Estudiante 1** revisa, hace **Merge pull request** → **Confirm merge** → **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 
@@ -82,7 +82,7 @@ Modificar `templates/pages/home.html`, cambiar la línea de tablas disponibles:
 <strong>Tablas disponibles:</strong> Producto, Persona, Usuario, Empresa, Rol, Ruta, Cliente, Vendedor, Factura.
 ```
 
-### Subir cambios y crear PR
+### Subir cambios y merge
 
 ```powershell
 git add .                                                          # agrega archivos
@@ -90,13 +90,13 @@ git commit -m "Actualizar Home con lista completa de tablas"       # guarda camb
 git push -u origin actualizar-home                                 # sube la rama
 ```
 
-Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request"). **Estudiante 1** revisa, hace **Merge pull request** → **Confirm merge** → **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 
 ## Estudiante 2 — Crear Factura
 
-**Requisito:** el PR de Estudiante 1 (ejecutar_sp) debe estar mergeado. Actualizar la rama:
+**Requisito:** Estudiante 1 debe haber fusionado la rama de ejecutar_sp. Actualizar la rama:
 
 ```powershell
 git fetch origin            # descarga cambios de GitHub
@@ -113,7 +113,7 @@ git merge origin/main       # aplica cambios de main a la rama actual
   app.register_blueprint(factura_bp)
   ```
 
-### Subir cambios y crear PR
+### Subir cambios y merge
 
 ```powershell
 git add .                                                      # agrega archivos
@@ -121,7 +121,7 @@ git commit -m "Agregar página Factura con stored procedures"   # guarda cambios
 git push -u origin crud-factura                                # sube la rama
 ```
 
-Quien hizo push crea el PR en GitHub (botón amarillo "Compare & pull request"). **Estudiante 1** revisa, hace **Merge pull request** → **Confirm merge** → **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 

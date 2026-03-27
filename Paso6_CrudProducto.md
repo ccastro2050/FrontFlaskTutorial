@@ -279,7 +279,7 @@ python app.py   # abrir http://localhost:5300/producto
 
 ---
 
-## 6. Subir cambios, PR y merge
+## 6. Subir cambios y merge
 
 ```powershell
 git add .                                          # agrega archivos
@@ -287,7 +287,7 @@ git commit -m "Agregar página CRUD Producto"       # guarda cambios
 git push -u origin crud-producto                   # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-producto` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** va a la pestaña **Pull requests**, abre el PR, revisa en **Files changed**, y hace **Merge pull request** → **Confirm merge**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 Después del merge, **Estudiante 2 y 3** actualizan:
 ```powershell

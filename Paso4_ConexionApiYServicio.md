@@ -140,7 +140,7 @@ python -c "from services.api_service import ApiService; print('ApiService OK')" 
 
 ---
 
-## 4. Subir cambios, PR y merge
+## 4. Subir cambios y merge
 
 ```powershell
 git add .                                    # agrega archivos al staging
@@ -148,8 +148,7 @@ git commit -m "Agregar ApiService y configurar conexión a la API"   # guarda ca
 git push -u origin api-service               # sube la rama a GitHub
 ```
 
-En GitHub: crear Pull Request `api-service` → `main`, aprobar y hacer merge.
-Después del merge, clic en **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 Después del merge, **Estudiante 2 y 3** actualizan:
 ```powershell

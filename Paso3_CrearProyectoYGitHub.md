@@ -146,26 +146,28 @@ Thumbs.db
 ## Parte B: Flujo de trabajo con Git y GitHub
 
 ```
-┌───────────────────────────────────────────────────────────────────┐
-│  main  ○──○──○──○──○──○──○──○──○──○──○──○───────────────────→    │
-│            ├── crud-producto ●──●  (Estudiante 1)                │
-│            │         ├── crud-empresa ●──●  (Estudiante 1)       │
-│            │                                                      │
-│            ├── crud-persona ●──●  (Estudiante 2)                 │
-│            │         ├── crud-cliente ●──●  (Estudiante 2)       │
-│            │                                                      │
-│            └── crud-usuario ●──●  (Estudiante 3)                 │
-│                      └── crud-rol ●──●  (Estudiante 3)           │
-└───────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│  main  ○──○──○──○──○──○──○──○──○──○──○──○───────────────────→           │
+│            ├── crud-producto ●──● ─ merge ─┘  (Estudiante 1)            │
+│            │         ├── crud-empresa ●──● ─ merge ─┘  (Estudiante 1)   │
+│            │                                                             │
+│            ├── crud-persona ●──● ─ merge ─┘  (Estudiante 2)            │
+│            │         ├── crud-cliente ●──● ─ merge ─┘  (Estudiante 2)   │
+│            │                                                             │
+│            └── crud-usuario ●──● ─ merge ─┘  (Estudiante 3)            │
+│                      └── crud-rol ●──● ─ merge ─┘  (Estudiante 3)      │
+│                                                                          │
+│  Flujo: push a rama → Est.1 hace git fetch + git merge desde terminal   │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
-Nadie trabaja directamente en `main`. Cada tarea se hace en su propia rama. Cuando se termina, se crea un Pull Request, se revisa, y se hace merge a main.
+Nadie trabaja directamente en `main`. Cada tarea se hace en su propia rama. Cuando se termina, Estudiante 1 fusiona desde la terminal con `git merge`.
 
 | Cuenta | Rol | Ramas | Permisos |
 |--------|-----|-------|----------|
-| **Estudiante 1** | Administrador del repositorio | Una rama por tarea (ej: `crud-producto`, `crud-empresa`) | Owner — crea el repo, invita, trabaja en sus ramas, revisa PRs de los demás, hace merge a main |
-| **Estudiante 2** | Colaborador | Una rama por tarea (ej: `crud-persona`, `crud-cliente`) | Write — trabaja en sus ramas, crea Pull Requests hacia main |
-| **Estudiante 3** | Colaborador | Una rama por tarea (ej: `crud-usuario`, `crud-rol`) | Write — trabaja en sus ramas, crea Pull Requests hacia main |
+| **Estudiante 1** | Administrador del repositorio | Una rama por tarea (ej: `crud-producto`, `crud-empresa`) | Owner — crea el repo, invita, trabaja en sus ramas, fusiona ramas desde la terminal a main |
+| **Estudiante 2** | Colaborador | Una rama por tarea (ej: `crud-persona`, `crud-cliente`) | Write — trabaja en sus ramas, sube con git push |
+| **Estudiante 3** | Colaborador | Una rama por tarea (ej: `crud-usuario`, `crud-rol`) | Write — trabaja en sus ramas, sube con git push |
 
 ---
 
@@ -198,34 +200,6 @@ git remote add origin https://github.com/TU_USUARIO/FrontFlaskTutorial.git   # c
 git branch -M main                   # renombra la rama principal a "main"
 git push -u origin main              # sube el código a GitHub por primera vez
 ```
-
-### C3.1 Proteger la rama main
-
-Proteger `main` significa que **nadie puede hacer push directo** a main — ni siquiera el dueño del repositorio. Todo cambio debe entrar por Pull Request aprobado. Esto evita que alguien suba código sin revisión.
-
-**¿Qué pasa cuando se protege?**
-- `git push origin main` falla — GitHub lo rechaza
-- Solo se puede integrar código creando un PR y haciendo merge
-- Se puede exigir que al menos 1 persona apruebe antes del merge
-
-**¿Por qué se hace después del primer push?** Porque el primer push (`git push -u origin main`) necesita subir el proyecto inicial directamente. Después de eso, todo cambio va por PR.
-
-**¿Aplica también para el dueño?** Sí. Con Branch Ruleset aplica para todos, incluyendo el dueño. Esto es lo recomendado para aprender — así todos están obligados a usar PRs. Si se necesita desactivar temporalmente, se puede hacer desde Settings.
-
-**Pasos para proteger:**
-
-1. Ir al repositorio en GitHub
-2. Clic en **Settings** (pestaña superior)
-3. En el menú izquierdo: **Rules** → **Rulesets**
-4. Clic en **New ruleset** → **New branch ruleset**
-5. **Ruleset Name:** `proteger-main`
-6. **Enforcement status:** cambiar de `Disabled` a **Active**
-7. En **Target branches:** clic en **Add target** → **Include by pattern** → escribir `main` → **Add**
-8. En la sección **Rules**, marcar **Require a pull request before merging**
-9. Dentro de esa opción, marcar **Require approvals** → dejar en **1**
-10. Clic en **Create** (botón verde abajo)
-
-A partir de este momento, nadie puede hacer `git push origin main` directamente. Todo debe ir por Pull Request.
 
 ### C4. Invitar a Estudiante 2 y Estudiante 3
 
@@ -301,7 +275,7 @@ git push -u origin crud-usuario
 
 ---
 
-## Parte E: Proceso de Pull Request
+## Parte E: Proceso de merge desde la terminal
 
 ### E1. Estudiante termina su tarea y sube los cambios
 
@@ -311,21 +285,33 @@ git commit -m "Agregar ruta y template CRUD Persona"  # guarda cambios
 git push origin crud-persona                       # sube a GitHub
 ```
 
-### E2. Crear el Pull Request en GitHub
+### E2. Estudiante 1 fusiona desde la terminal
 
-1. Ir al repositorio en GitHub
-2. Aparecerá un banner amarillo: **"crud-persona had recent pushes"** → Clic en **Compare & pull request**
-3. O ir a **Pull requests** → **New pull request**
-4. Base: `main` ← Compare: `crud-persona`
-5. Escribir título y descripción
-6. Clic en **Create pull request**
+Estudiante 1 (administrador) descarga la rama del compañero y la fusiona en main:
 
-### E3. Estudiante 1 revisa y hace merge
+```bash
+git checkout main                                  # cambiar a la rama principal
+git fetch origin                                   # descargar todas las ramas remotas
+git merge origin/crud-persona                      # fusionar la rama del compañero en main
+git push origin main                               # subir main actualizado a GitHub
+```
 
-1. Ir a **Pull requests** → Clic en el PR
-2. Revisar los cambios en **Files changed**
-3. Si está bien → Clic en **Merge pull request** → **Confirm merge**
-4. Clic en **Delete branch** (la rama ya cumplió su propósito, el código está seguro en main)
+Si hay conflictos, resolverlos en el editor, luego:
+
+```bash
+git add .                                          # marcar los conflictos como resueltos
+git commit -m "Resolver conflictos de crud-persona"  # guardar la resolución
+git push origin main                               # subir main actualizado
+```
+
+### E3. Eliminar la rama (opcional)
+
+Una vez fusionada, la rama ya no es necesaria:
+
+```bash
+git branch -d crud-persona                         # eliminar rama local
+git push origin --delete crud-persona              # eliminar rama remota
+```
 
 ### E4. Todos actualizan main
 
@@ -353,7 +339,8 @@ git pull                              # descargar los cambios mergeados
 | `git branch` | Lista las ramas locales |
 | `git status` | Muestra qué archivos cambiaron |
 | `git fetch origin` | Descarga cambios de GitHub sin aplicarlos |
-| `git merge origin/main` | Aplica cambios de main a la rama actual |
+| `git merge origin/<rama>` | Fusiona una rama remota en la rama actual |
+| `git push origin --delete <rama>` | Elimina una rama remota en GitHub |
 | `git remote add origin <url>` | Conecta el repo local con GitHub |
 
 ---

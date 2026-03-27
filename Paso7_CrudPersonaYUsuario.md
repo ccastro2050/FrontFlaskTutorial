@@ -9,7 +9,7 @@ Los dos estudiantes trabajan **en paralelo**, cada uno en su propia rama.
 
 Ambos siguen la misma estructura que Producto (Paso 6). Lo que cambia son los campos, el nombre de la tabla y el template.
 
-**Importante:** cada estudiante debe registrar su Blueprint en `app.py`. Como ambos modifican el mismo archivo, el segundo PR podría tener un **conflicto de merge**. Ver la sección de resolución de conflictos al final.
+**Importante:** cada estudiante debe registrar su Blueprint en `app.py`. Como ambos modifican el mismo archivo, el segundo merge podría tener un **conflicto de merge**. Ver la sección de resolución de conflictos al final.
 
 ---
 
@@ -122,7 +122,7 @@ from routes.persona import bp as persona_bp
 app.register_blueprint(persona_bp)
 ```
 
-### 4. Subir cambios y crear PR
+### 4. Subir cambios y merge
 
 ```powershell
 git add .                                          # agrega archivos
@@ -130,8 +130,7 @@ git commit -m "Agregar ruta y template CRUD Persona"   # guarda cambios
 git push -u origin crud-persona                    # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-persona` → `main`. Si no aparece: pestaña **Pull requests** → **New pull request**.
-**Estudiante 1** revisa, aprueba y hace merge. Clic en **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 
@@ -222,7 +221,7 @@ from routes.usuario import bp as usuario_bp
 app.register_blueprint(usuario_bp)
 ```
 
-### 4. Subir cambios y crear PR
+### 4. Subir cambios y merge
 
 ```powershell
 git add .                                           # agrega archivos
@@ -230,22 +229,21 @@ git commit -m "Agregar ruta y template CRUD Usuario"    # guarda cambios
 git push -u origin crud-usuario                     # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-usuario` → `main`. Si no aparece: pestaña **Pull requests** → **New pull request**.
-**Estudiante 1** revisa, aprueba y hace merge. Clic en **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 
 ## Conflicto en app.py (paso a paso)
 
-Como ambos estudiantes modifican `app.py` (para registrar su Blueprint), el **segundo PR** muestra un conflicto. GitHub no puede hacer merge automáticamente porque ambos agregaron líneas en el mismo lugar.
+Como ambos estudiantes modifican `app.py` (para registrar su Blueprint), el **segundo merge** puede tener un conflicto. Git no puede hacer merge automáticamente porque ambos agregaron líneas en el mismo lugar.
 
-### ¿Qué se ve en GitHub?
+### ¿Qué se ve en la terminal?
 
-El PR muestra: **"This branch has conflicts that must be resolved"** con un botón **Resolve conflicts**.
+Al ejecutar `git merge origin/crud-usuario`, Git muestra: **"CONFLICT (content): Merge conflict in app.py"** y el merge queda pendiente.
 
 ### ¿Cómo resolverlo?
 
-1. Clic en **Resolve conflicts** — se abre un editor con el archivo `app.py`
+1. Abrir `app.py` en VS Code — se ven marcas de conflicto:
 
 2. Se ven marcas de conflicto como estas:
 
@@ -280,11 +278,15 @@ app.register_blueprint(usuario_bp)
 app.register_blueprint(persona_bp)
 ```
 
-6. Clic en **Mark as resolved** (arriba a la derecha)
+6. Guardar el archivo en VS Code
 
-7. Clic en **Commit merge** (botón verde que aparece)
+7. En la terminal, ejecutar:
 
-8. Ahora el PR puede mergearse: clic en **Merge pull request** → **Confirm merge**
+```powershell
+git add app.py
+git commit -m "Resolver conflicto en app.py: agregar ambos Blueprints"
+git push origin main
+```
 
 ### ¿Por qué pasó esto?
 
@@ -296,11 +298,11 @@ Porque ambos estudiantes agregaron una línea nueva en el mismo lugar de `app.py
 
 Esto pasa cuando un estudiante ejecuta los comandos git en la terminal equivocada. Por ejemplo, est2 ejecuta `git push -u origin crud-vendedor` pero en la carpeta de est3, subiendo el código de NavMenu en la branch de Vendedor.
 
-**¿Qué pasa?** El código llega a GitHub y el PR se puede crear y mergear normalmente. El código final en `main` será correcto. Pero el PR dice "CRUD Vendedor" y tiene cambios de NavMenu — es confuso para quien revisa.
+**¿Qué pasa?** El código llega a GitHub y se puede fusionar normalmente. El código final en `main` será correcto. Pero la rama dice "crud-vendedor" y tiene cambios de NavMenu — es confuso para quien revisa.
 
 **¿Cómo solucionarlo?**
 
-**Opción 1 (la más simple):** Cambiar el título del PR en GitHub para que coincida con lo que realmente tiene. Est1 (Scrum Master) revisa el contenido real del PR, no el título, y hace merge igual.
+**Opción 1 (la más simple):** Est1 (Scrum Master) revisa el contenido real de la rama, no el nombre, y fusiona igual.
 
 **Opción 2 (la correcta):** El estudiante corrige desde su terminal:
 
@@ -319,8 +321,8 @@ git push -u origin crud-vendedor --force   # sobreescribe la rama en GitHub
 ```
 
 **¿Cuándo usar cada opción?**
-- Si el PR aún no fue mergeado → Opción 2 (corregir)
-- Si el PR ya fue mergeado → no importa, el código ya está en main
+- Si la rama aún no fue fusionada → Opción 2 (corregir)
+- Si la rama ya fue fusionada → no importa, el código ya está en main
 
 ---
 

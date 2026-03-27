@@ -8,9 +8,9 @@ Los tres estudiantes trabajan **en paralelo**, cada uno en su propia rama.
 | **Estudiante 2** | CRUD Vendedor | `crud-vendedor` | Tiene FK a persona + id autoincremental |
 | **Estudiante 3** | Actualizar NavMenu | `actualizar-navmenu` | Agregar links de Cliente, Vendedor y Factura al menú |
 
-### ¿En qué orden se hacen los PRs?
+### ¿En qué orden se hacen los merge?
 
-Los PRs se pueden hacer **en cualquier orden** porque cada uno toca archivos diferentes (ruta.py, vendedor.py, nav_menu.html). No hay dependencias entre ellos.
+Los merge se pueden hacer **en cualquier orden** porque cada uno toca archivos diferentes (ruta.py, vendedor.py, nav_menu.html). No hay dependencias entre ellos.
 
 El único conflicto posible es en `app.py` (est1 y est2 agregan su Blueprint). Se resuelve igual que en el Paso 7: dejar ambas líneas sin duplicados.
 
@@ -50,7 +50,7 @@ Y en los templates se usa `url_for('ruta_page.index')` en vez de `url_for('ruta.
   app.register_blueprint(ruta_bp)
   ```
 
-### Subir cambios y crear PR
+### Verificar y subir
 
 ```powershell
 git add .                                          # agrega archivos
@@ -58,7 +58,7 @@ git commit -m "Agregar ruta y template CRUD Ruta"  # guarda cambios
 git push -u origin crud-ruta                       # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-ruta` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** abre el PR, revisa en **Files changed**, hace **Merge pull request** → **Confirm merge**, y clic en **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 
@@ -76,7 +76,7 @@ Vendedor es similar a Cliente: tiene FK a persona y id autoincremental.
   app.register_blueprint(vendedor_bp)
   ```
 
-### Subir cambios y crear PR
+### Verificar y subir
 
 ```powershell
 git add .                                              # agrega archivos
@@ -84,7 +84,7 @@ git commit -m "Agregar ruta y template CRUD Vendedor"  # guarda cambios
 git push -u origin crud-vendedor                       # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `crud-vendedor` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** abre el PR, revisa en **Files changed**, hace **Merge pull request** → **Confirm merge**, y clic en **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 
@@ -116,7 +116,7 @@ Agregar estos 3 bloques antes del cierre de `</nav>`:
         </div>
 ```
 
-### Subir cambios y crear PR
+### Verificar y subir
 
 ```powershell
 git add .                                                              # agrega archivos
@@ -124,7 +124,7 @@ git commit -m "Agregar links de Cliente, Vendedor y Factura al menu"   # guarda 
 git push -u origin actualizar-navmenu                                  # sube la rama
 ```
 
-Quien hizo push ve el botón amarillo "Compare & pull request" en GitHub y crea el PR: `actualizar-navmenu` → `main`. Si no aparece el botón: ir a la pestaña **Pull requests** → **New pull request**. Después, **Estudiante 1** abre el PR, revisa en **Files changed**, hace **Merge pull request** → **Confirm merge**, y clic en **Delete branch**.
+Despues, **Estudiante 1** fusiona desde la terminal con `git fetch origin` + `git merge origin/nombre-rama` + `git push origin main`.
 
 ---
 

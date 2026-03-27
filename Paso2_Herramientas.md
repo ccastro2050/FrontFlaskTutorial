@@ -73,7 +73,7 @@ git merge origin/main       # Aplicar cambios de main a la rama actual
 
 **Qué hace en este proyecto:**
 - Almacenar el código del equipo
-- Gestionar Pull Requests (revisión de código)
+- Fusionar ramas desde la terminal (`git merge`)
 - Controlar quién puede modificar `main`
 
 **Crear cuenta:** https://github.com
