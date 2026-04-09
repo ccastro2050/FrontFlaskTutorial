@@ -1,5 +1,4 @@
-"""
-auth_middleware.py - Middleware de autenticacion y control de acceso.
+"""Middleware de autenticacion y control de acceso por rutas.
 
 QUE ES UN MIDDLEWARE:
 =====================
@@ -16,19 +15,19 @@ FLUJO DE CADA REQUEST:
        v
   [before_request] <-- ESTE MIDDLEWARE
        |
-       ├── Es ruta publica (/login, /static, etc)?  -> SI: dejar pasar
+       +-- Es ruta publica (/login, /static, etc)?  -> SI: dejar pasar
        |
-       ├── Tiene sesion activa?  -> NO: redirigir a /login
+       +-- Tiene sesion activa?  -> NO: redirigir a /login
        |
-       ├── Debe cambiar contrasena?  -> SI: redirigir a /cambiar-contrasena
+       +-- Debe cambiar contrasena?  -> SI: redirigir a /cambiar-contrasena
        |
-       ├── Es la pagina de inicio (/)?  -> SI: dejar pasar (siempre accesible)
+       +-- Es la pagina de inicio (/)?  -> SI: dejar pasar (siempre accesible)
        |
-       ├── Tiene rutas_permitidas configuradas?  -> NO: dejar pasar (sistema nuevo)
+       +-- Tiene rutas_permitidas configuradas?  -> NO: dejar pasar (sistema nuevo)
        |
-       ├── La ruta esta en sus rutas_permitidas?  -> SI: dejar pasar
+       +-- La ruta esta en sus rutas_permitidas?  -> SI: dejar pasar
        |
-       └── NO esta permitida  -> Mostrar pagina "Acceso Denegado" (403)
+       +-- NO esta permitida  -> Mostrar pagina "Acceso Denegado" (403)
 
 QUE ES EL CONTEXT PROCESSOR:
 =============================
@@ -40,77 +39,43 @@ Ejemplo en cualquier template:
   {{ usuario }}              -> email del usuario logueado
   {{ nombre_usuario }}       -> nombre para mostrar
   {{ roles }}                -> lista de roles
-  {% if "/producto" in rutas_permitidas %}  -> condicional para mostrar/ocultar menu
+  {%% if "/producto" in rutas_permitidas %%}  -> condicional para mostrar/ocultar menu
 """
 
 from flask import session, redirect, url_for, flash, request, render_template
 
 
-# Lista de rutas que NO requieren autenticacion.
-# Cualquier URL que empiece con alguna de estas se deja pasar sin verificar.
-# Ejemplo: "/static/css/app.css" empieza con "/static" -> es publica.
 RUTAS_PUBLICAS = ['/login', '/logout', '/static', '/recuperar-contrasena', '/ayuda']
 
 
 def crear_middleware(app):
-    """
-    Registra el middleware de autenticacion en la aplicacion Flask.
+    """Registra before_request con enforcement real de rutas_permitidas."""
 
-    Se llama desde app.py asi:
-        from middleware.auth_middleware import crear_middleware
-        crear_middleware(app)
-
-    Esto registra dos funciones:
-      1. before_request: se ejecuta ANTES de cada peticion
-      2. context_processor: inyecta variables en todas las templates
-    """
-
-    # ──────────────────────────────────────────────────────────
-    # BEFORE_REQUEST: Se ejecuta antes de CADA peticion HTTP
-    # ──────────────────────────────────────────────────────────
     @app.before_request
     def verificar_autenticacion():
-        """
-        Verifica si el usuario puede acceder a la ruta solicitada.
-        Si retorna None (no retorna nada), Flask continua con la ruta normal.
-        Si retorna un redirect o render_template, Flask usa esa respuesta
-        en vez de la ruta original (bloquea el acceso).
-        """
-
-        # 1. RUTAS PUBLICAS: no requieren autenticacion
-        #    Ejemplo: /login, /static/css/app.css, /ayuda
+        # 1. Rutas publicas: no requieren autenticacion
         if any(request.path.startswith(r) for r in RUTAS_PUBLICAS):
-            return  # return sin valor = dejar pasar
+            return
 
-        # 2. NO HAY SESION: el usuario no ha hecho login
-        #    session.get("usuario") retorna None si no existe
+        # 2. No hay sesion: redirigir a login
         if not session.get("usuario"):
             return redirect(url_for("auth.login"))
 
-        # 3. DEBE CAMBIAR CONTRASENA: forzar antes de hacer cualquier cosa
-        #    Esto se activa cuando se recupera una contrasena con temporal
+        # 3. Debe cambiar contrasena: forzar cambio
         if session.get("debe_cambiar_contrasena") and request.path != "/cambiar-contrasena":
             return redirect(url_for("auth.cambiar_contrasena"))
 
-        # 4. PAGINA DE INICIO: siempre accesible para usuarios autenticados
-        #    No tendria sentido bloquear la pagina principal
+        # 4. Control de acceso por ruta
+        #    La ruta "/" (home) siempre es accesible para usuarios autenticados
         if request.path == "/":
             return
 
-        # 5. CONTROL DE ACCESO POR RUTA
-        #    Aqui es donde se verifica si el usuario tiene permiso para
-        #    acceder a la pagina solicitada, segun sus roles.
         rutas_permitidas = set(session.get("rutas_permitidas", []))
-
         if not rutas_permitidas:
-            # Si no hay rutas configuradas en el sistema, permitir todo.
-            # Esto pasa cuando el sistema es nuevo y no se han creado
-            # las tablas ruta/rutarol, o no se han asignado rutas a roles.
+            # Si no hay rutas asignadas, permitir (sistema sin admin_rutas configurado)
             return
 
-        # Verificar si la ruta actual esta en las rutas permitidas.
-        # Tambien verifica sub-rutas: si "/producto" esta permitida,
-        # entonces "/producto/editar" tambien lo esta.
+        # Verificar si la ruta actual (o su prefijo) esta permitida
         ruta_actual = request.path
         permitida = False
         for ruta in rutas_permitidas:
@@ -119,28 +84,11 @@ def crear_middleware(app):
                 break
 
         if not permitida:
-            # El usuario no tiene permiso -> mostrar pagina de error 403
             return render_template("pages/sin_acceso.html"), 403
 
-    # ──────────────────────────────────────────────────────────
-    # CONTEXT PROCESSOR: Inyecta variables en todas las templates
-    # ──────────────────────────────────────────────────────────
+
     @app.context_processor
     def inyectar_sesion():
-        """
-        Hace que estas variables esten disponibles en TODAS las templates
-        Jinja2 sin necesidad de pasarlas manualmente en render_template().
-
-        En cualquier template puedes usar:
-          {{ usuario }}          -> "juan@mail.com"
-          {{ nombre_usuario }}   -> "Juan Perez"
-          {{ roles }}            -> ["Vendedor", "Bodeguero"]
-
-        Para mostrar/ocultar elementos del menu segun permisos:
-          {% if "/producto" in rutas_permitidas %}
-              <a href="/producto">Productos</a>
-          {% endif %}
-        """
         return {
             "usuario": session.get("usuario", ""),
             "nombre_usuario": session.get("nombre_usuario", ""),
