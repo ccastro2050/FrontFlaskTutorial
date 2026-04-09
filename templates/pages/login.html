@@ -1,0 +1,71 @@
+{#
+  login.html - Pagina de inicio de sesion.
+
+  CONCEPTOS JINJA2:
+  =================
+  - {% extends 'layout/base.html' %}  -> Hereda el layout base (navbar, footer, CSS).
+  - {% block title %}...{% endblock %} -> Reemplaza el titulo de la pagina.
+  - {% block content %}...{% endblock %} -> Reemplaza el contenido principal.
+  - {{ url_for('auth.login_post') }}   -> Genera la URL "/login" para el POST.
+  - get_flashed_messages()             -> Obtiene mensajes flash (alertas temporales).
+
+  COMO FUNCIONA:
+  ==============
+  1. Este template muestra un formulario con email y contrasena.
+  2. Al hacer clic en "Iniciar sesion", el formulario envia un POST a /login.
+  3. Flask procesa el POST en routes/auth.py (funcion login_post).
+  4. Si las credenciales son correctas, redirige al inicio.
+  5. Si son incorrectas, muestra un mensaje de error (flash) y vuelve aqui.
+#}
+
+{% extends 'layout/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{# Contenedor centrado vertical y horizontalmente #}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh">
+    <div class="card shadow" style="width:400px">
+
+        {# Header del card con el nombre de la aplicacion #}
+        <div class="card-header text-center" style="background:var(--primary, #0d6efd);color:white">
+            <h4 class="mb-0">FrontFlaskTutorial</h4>
+        </div>
+
+        <div class="card-body p-4">
+            {# Mensajes flash: alertas que se muestran una sola vez.
+               Ejemplo: "Credenciales incorrectas" (danger=rojo),
+                        "Bienvenido" (success=verde) #}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show py-2" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            {# Formulario de login.
+               method="POST": envia los datos en el cuerpo del request (no en la URL).
+               action: la URL a donde se envian los datos.
+               Los campos name="email" y name="contrasena" son los que
+               routes/auth.py lee con request.form.get("email") #}
+            <form method="POST" action="{{ url_for('auth.login_post') }}">
+                <div class="mb-3">
+                    <label class="form-label">Correo electronico</label>
+                    <input type="email" class="form-control" name="email" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contrasena</label>
+                    <input type="password" class="form-control" name="contrasena" required>
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Iniciar sesion</button>
+            </form>
+
+            {# Link a la pagina de recuperacion de contrasena #}
+            <div class="text-center mt-3">
+                <a href="{{ url_for('auth.recuperar_contrasena') }}" class="small">Olvido su contrasena?</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

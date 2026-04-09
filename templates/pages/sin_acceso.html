@@ -1,0 +1,47 @@
+{#
+  sin_acceso.html - Pagina de error 403 (Acceso Denegado).
+
+  CUANDO SE MUESTRA:
+  ==================
+  Esta pagina aparece cuando un usuario autenticado intenta acceder a una
+  ruta para la cual NO tiene permiso segun sus roles.
+
+  Ejemplo:
+    - El usuario "juan@mail.com" tiene rol "Vendedor"
+    - El rol "Vendedor" solo tiene acceso a /producto y /cliente
+    - Juan intenta acceder a /factura (no asignada a su rol)
+    - El middleware (auth_middleware.py) detecta que /factura NO esta
+      en sus rutas_permitidas y muestra esta pagina con codigo HTTP 403.
+
+  CODIGO HTTP 403:
+  ================
+  403 = "Forbidden" (Prohibido). Significa que el servidor entendio el request
+  pero se niega a cumplirlo porque el usuario no tiene permisos.
+  Es diferente de 401 (no autenticado) y 404 (no encontrado).
+
+  Para que esta pagina NO aparezca, el administrador debe:
+    1. Ir a "Admin Rutas" y sincronizar las rutas del sistema
+    2. Asignar las rutas necesarias al rol del usuario
+#}
+
+{% extends 'layout/base.html' %}
+{% block title %}Sin Acceso{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh">
+    <div class="card shadow" style="width:450px">
+
+        {# Header rojo indica error/peligro #}
+        <div class="card-header text-center bg-danger text-white">
+            <h5 class="mb-0">Acceso Denegado</h5>
+        </div>
+
+        <div class="card-body p-4 text-center">
+            <p class="fs-1 mb-2">&#x1F6AB;</p>
+            <p>No tiene permisos para acceder a esta pagina.</p>
+            <p class="text-muted small">Contacte al administrador si necesita acceso.</p>
+            <a href="{{ url_for('home.index') }}" class="btn btn-primary mt-2">Volver al inicio</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

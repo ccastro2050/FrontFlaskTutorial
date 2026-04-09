@@ -1,0 +1,65 @@
+{#
+  recuperar_contrasena.html - Formulario para recuperar contrasena olvidada.
+
+  COMO FUNCIONA:
+  ==============
+  1. El usuario ingresa su email y hace clic en "Enviar".
+  2. El servidor busca el email en la tabla "usuario".
+  3. Si existe, genera una contrasena temporal aleatoria (ej: "Ak7xPm2q").
+  4. La guarda encriptada con BCrypt en la BD (la anterior se pierde).
+  5. Intenta enviar la temporal por correo SMTP (si esta configurado).
+  6. En el proximo login con la temporal, el sistema FUERZA cambio de contrasena.
+
+  NOTA DE SEGURIDAD:
+  ==================
+  Esta pagina es PUBLICA (no requiere login) porque el usuario que la necesita
+  obviamente no puede hacer login. Esta incluida en RUTAS_PUBLICAS del middleware.
+
+  CONFIGURACION SMTP:
+  ===================
+  Si SMTP no esta configurado en config.py, la contrasena se cambia en la BD
+  pero no se puede enviar el correo. El admin debe comunicarla manualmente.
+#}
+
+{% extends 'layout/base.html' %}
+{% block title %}Recuperar Contrasena{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh">
+    <div class="card shadow" style="width:400px">
+
+        {# Header azul claro indica informacion/ayuda #}
+        <div class="card-header text-center bg-info text-white">
+            <h5 class="mb-0">Recuperar Contrasena</h5>
+        </div>
+
+        <div class="card-body p-4">
+            {# Mensajes flash #}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show py-2">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <p class="small text-muted">Ingrese su correo para recibir una contrasena temporal.</p>
+
+            {# Solo necesita el email para buscar la cuenta #}
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Correo electronico</label>
+                    <input type="email" class="form-control" name="email" required autofocus>
+                </div>
+                <button class="btn btn-info w-100 text-white" type="submit">Enviar</button>
+            </form>
+
+            {# Link para volver al login #}
+            <div class="text-center mt-3">
+                <a href="{{ url_for('auth.login') }}" class="small">Volver al login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

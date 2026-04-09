@@ -1,0 +1,66 @@
+{#
+  cambiar_contrasena.html - Formulario para cambiar la contrasena.
+
+  CUANDO SE MUESTRA:
+  ==================
+  1. Cuando el usuario hace clic en "Cambiar contrasena" voluntariamente.
+  2. Cuando el sistema lo FUERZA despues de usar una contrasena temporal
+     (recuperacion de contrasena). En este caso, el middleware redirige
+     aqui automaticamente y no deja navegar a ninguna otra pagina.
+
+  VALIDACION:
+  ===========
+  La validacion ocurre en el servidor (routes/auth.py):
+    - Minimo 6 caracteres
+    - Al menos 1 mayuscula (A-Z)
+    - Al menos 1 numero (0-9)
+    - No puede ser trivial (123456, etc)
+  Si falla, se muestra un flash message con el error.
+#}
+
+{% extends 'layout/base.html' %}
+{% block title %}Cambiar Contrasena{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh">
+    <div class="card shadow" style="width:400px">
+
+        {# Header amarillo indica precaucion/accion requerida #}
+        <div class="card-header text-center bg-warning text-dark">
+            <h5 class="mb-0">Cambiar Contrasena</h5>
+        </div>
+
+        <div class="card-body p-4">
+            {# Mensajes flash (errores de validacion o exito) #}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show py-2">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            {# Formulario con 3 campos de contrasena.
+               No tiene action= porque hace POST a la misma URL (/cambiar-contrasena).
+               Los campos name= son leidos por request.form.get() en auth.py #}
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Contrasena actual</label>
+                    <input type="password" class="form-control" name="actual" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nueva contrasena</label>
+                    <input type="password" class="form-control" name="nueva" required>
+                    <small class="text-muted">Minimo 6 caracteres, 1 mayuscula, 1 numero</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirmar nueva contrasena</label>
+                    <input type="password" class="form-control" name="confirmar" required>
+                </div>
+                <button class="btn btn-warning w-100" type="submit">Cambiar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
