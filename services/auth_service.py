@@ -46,10 +46,35 @@ class AuthService:
         self.base_url = API_BASE_URL
         # requests.Session() reutiliza la conexion HTTP (mas eficiente)
         self.session = requests.Session()
+        # Cache para guardar resultados de estructura (PKs, FKs).
+        # Evita consultar la API multiples veces por la misma tabla.
+        # Se llena la primera vez que se consulta y se reutiliza despues.
         self._fk_cache = {}
 
+    # ──────────────────────────────────────────────────────────
+    # METODOS INTERNOS: Descubrimiento dinamico de estructura
+    # ──────────────────────────────────────────────────────────
+    # Estos metodos consultan la API para saber como se llaman las
+    # columnas PK y FK de cada tabla. Asi el servicio funciona con
+    # cualquier base de datos sin hardcodear nombres de columnas.
+    #
+    # Ejemplo: en vez de asumir que rol_usuario tiene un campo "fkemail",
+    # preguntamos a la API: "que columna de rol_usuario apunta a usuario?"
+    # La API responde: "fkemail" (o como se llame en esa BD).
+    #
+    # Los resultados se guardan en _fk_cache para no repetir consultas.
+    # ──────────────────────────────────────────────────────────
+
     def _obtener_estructura(self, tabla):
-        """Obtiene la estructura de una tabla via GET /api/estructuras/{tabla}/modelo."""
+        """
+        Obtiene la estructura de una tabla via GET /api/estructuras/{tabla}/modelo.
+        Retorna una lista de columnas con sus propiedades:
+          - column_name: nombre de la columna
+          - data_type: tipo de dato (varchar, integer, etc)
+          - is_primary_key: "YES" o "NO"
+          - foreign_table_name: tabla a la que apunta (si es FK)
+          - fk_constraint_name: nombre de la constraint FK
+        """
         cache_key = f"estructura_{tabla}"
         if cache_key in self._fk_cache:
             return self._fk_cache[cache_key]
@@ -64,7 +89,18 @@ class AuthService:
             return []
 
     def _obtener_fk(self, tabla_origen, tabla_destino):
-        """Descubre el nombre del FK en tabla_origen que apunta a tabla_destino."""
+        """
+        Descubre que columna de tabla_origen es FK hacia tabla_destino.
+
+        Ejemplo: _obtener_fk("rol_usuario", "usuario") -> "fkemail"
+                 _obtener_fk("rol_usuario", "rol") -> "fkidrol"
+                 _obtener_fk("rutarol", "ruta") -> "fkidruta"
+
+        Busca de dos formas (compatible con Postgres y SqlServer):
+          1. Por foreign_table_name directo (Postgres lo devuelve correctamente)
+          2. Por fk_constraint_name que contenga el nombre de la tabla destino
+             (SqlServer a veces no devuelve foreign_table_name correctamente)
+        """
         cache_key = f"{tabla_origen}->{tabla_destino}"
         if cache_key in self._fk_cache:
             return self._fk_cache[cache_key]
@@ -74,7 +110,7 @@ class AuthService:
             if col.get("foreign_table_name") == tabla_destino:
                 self._fk_cache[cache_key] = col["column_name"]
                 return col["column_name"]
-        # 2. Fallback: buscar en fk_constraint_name que contenga el nombre de la tabla destino (SqlServer)
+        # 2. Fallback: buscar en fk_constraint_name (SqlServer)
         for col in columnas:
             constraint = col.get("fk_constraint_name", "") or ""
             if tabla_destino in constraint.lower() and col.get("foreign_table_name"):
@@ -83,7 +119,13 @@ class AuthService:
         return None
 
     def _obtener_pk(self, tabla):
-        """Descubre el nombre de la PK de una tabla."""
+        """
+        Descubre que columna es la PK de una tabla.
+
+        Ejemplo: _obtener_pk("usuario") -> "email"
+                 _obtener_pk("rol") -> "id"
+                 _obtener_pk("ruta") -> "id"
+        """
         cache_key = f"pk_{tabla}"
         if cache_key in self._fk_cache:
             return self._fk_cache[cache_key]
