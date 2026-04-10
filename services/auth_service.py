@@ -69,8 +69,15 @@ class AuthService:
         if cache_key in self._fk_cache:
             return self._fk_cache[cache_key]
         columnas = self._obtener_estructura(tabla_origen)
+        # 1. Buscar por foreign_table_name directo (Postgres)
         for col in columnas:
             if col.get("foreign_table_name") == tabla_destino:
+                self._fk_cache[cache_key] = col["column_name"]
+                return col["column_name"]
+        # 2. Fallback: buscar en fk_constraint_name que contenga el nombre de la tabla destino (SqlServer)
+        for col in columnas:
+            constraint = col.get("fk_constraint_name", "") or ""
+            if tabla_destino in constraint.lower() and col.get("foreign_table_name"):
                 self._fk_cache[cache_key] = col["column_name"]
                 return col["column_name"]
         return None
@@ -215,13 +222,13 @@ class AuthService:
     def actualizar_contrasena(self, email, nueva_contrasena):
         """
         Actualiza la contrasena en la BD.
-        El parametro ?encriptar=contrasena le dice a la API que
+        El parametro ?camposEncriptar=contrasena le dice a la API que
         encripte con BCrypt antes de guardar. Sin esto, se guardaria
         en texto plano (inseguro).
         """
         try:
             pk_usuario = self._obtener_pk("usuario")
-            url = f"{self.base_url}/api/usuario/{pk_usuario}/{email}?encriptar=contrasena"
+            url = f"{self.base_url}/api/usuario/{pk_usuario}/{email}?camposEncriptar=contrasena"
             resp = self.session.put(url, json={"contrasena": nueva_contrasena}, timeout=30)
             if resp.ok:
                 return True, "Contrasena actualizada."
