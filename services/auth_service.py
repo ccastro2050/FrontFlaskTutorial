@@ -1,4 +1,36 @@
-"""Servicio de autenticacion contra la API.\n
+"""Servicio de autenticacion y autorizacion contra la API.
+
+QUE SE NECESITA PARA LOGIN Y CONTROL DE ACCESO:
+=================================================
+
+ARCHIVOS QUE SE CREAN (nuevos):
+  services/auth_service.py              <- ESTE ARCHIVO: toda la logica de auth
+  services/email_service.py             <- Envio de correos SMTP (contrasena temporal)
+  routes/auth.py                        <- Rutas: /login, /logout, /cambiar, /recuperar
+  middleware/auth_middleware.py          <- Intercepta cada request y verifica permisos
+  templates/pages/login.html            <- Formulario de login
+  templates/pages/cambiar_contrasena.html <- Formulario para cambiar contrasena
+  templates/pages/recuperar_contrasena.html <- Recuperar contrasena por email SMTP
+  templates/pages/sin_acceso.html       <- Pagina error 403 (no tiene permiso)
+
+ARCHIVOS QUE SE MODIFICAN (existentes):
+  config.py                             <- Agregar: variables SMTP (si no existen)
+  app.py                                <- Agregar: crear_middleware(app) + auth_bp
+  templates/layout/base.html            <- Agregar: boton login/logout en barra superior
+
+TABLAS QUE SE NECESITAN EN LA BD (5):
+  usuario      <- email (PK) + contrasena (BCrypt)
+  rol          <- id + nombre (Administrador, Vendedor, etc)
+  rol_usuario  <- vincula usuario con roles (N:M)
+  ruta         <- id + ruta (/producto, /cliente, etc)
+  rutarol      <- vincula roles con rutas (N:M)
+
+LOS 3 CONCEPTOS CLAVE DE SEGURIDAD:
+=====================================
+1. AUTENTICACION = ¿Quien eres? (login, BCrypt, JWT)
+2. AUTORIZACION = ¿Que puedes hacer? (roles, rutas, permisos)
+3. ENCRIPTACION = ¿Como se protege? (BCrypt para contrasenas, SECRET_KEY para sesion, HTTPS)
+
 COMO FUNCIONA LA AUTENTICACION:
 ===============================
 1. El usuario envia email + contrasena desde el formulario de login.

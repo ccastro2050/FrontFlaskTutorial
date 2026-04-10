@@ -17,27 +17,42 @@ Este paso agrega autenticacion completa al proyecto:
 
 ---
 
-## Archivos creados
+## Que se crea, que se modifica, que se agrega
 
-```
-FrontFlaskTutorial/
-├── middleware/
-│   └── auth_middleware.py         <- Intercepta cada request y verifica permisos
-├── services/
-│   ├── auth_service.py            <- Logica de login, roles, rutas, contrasenas
-│   └── email_service.py           <- Envio de correos SMTP
-├── routes/
-│   └── auth.py                    <- Rutas: /login, /logout, /cambiar, /recuperar
-└── templates/pages/
-    ├── login.html                 <- Formulario de login
-    ├── cambiar_contrasena.html    <- Formulario cambio de contrasena
-    ├── recuperar_contrasena.html  <- Formulario recuperacion
-    └── sin_acceso.html            <- Pagina error 403 (sin permisos)
-```
+### Archivos que se CREAN (nuevos)
+
+| Archivo | Para que |
+|---------|---------|
+| `services/auth_service.py` | Toda la logica: login, roles, rutas, cambiar contrasena, descubrimiento dinamico |
+| `services/email_service.py` | Envio de correos SMTP (contrasena temporal) |
+| `routes/auth.py` | Rutas: /login, /logout, /cambiar-contrasena, /recuperar-contrasena |
+| `middleware/auth_middleware.py` | Intercepta CADA request y verifica si el usuario puede acceder |
+| `templates/pages/login.html` | Formulario de login (email + contrasena) |
+| `templates/pages/cambiar_contrasena.html` | Formulario para cambiar contrasena |
+| `templates/pages/recuperar_contrasena.html` | Recuperar contrasena olvidada (envia email SMTP) |
+| `templates/pages/sin_acceso.html` | Pagina error 403 (no tiene permiso para esa ruta) |
+
+### Archivos que se MODIFICAN (ya existian)
+
+| Archivo | Que se agrega | Para que |
+|---------|---------------|---------|
+| `config.py` | Variables SMTP (Host, Port, User, Pass, From) | Configurar correo Gmail para recuperar contrasena |
+| `app.py` | `crear_middleware(app)` + `auth_bp` | Registrar el middleware de auth y las rutas de login |
+| `templates/layout/base.html` | Boton login/logout en barra superior | Mostrar nombre del usuario y boton para cerrar sesion |
+
+### Tablas que se necesitan en la BD (5)
+
+| Tabla | Para que |
+|-------|---------|
+| `usuario` | Almacenar credenciales (email + contrasena BCrypt) |
+| `rol` | Definir tipos de usuario (Administrador, Vendedor, etc) |
+| `rol_usuario` | Asignar roles a usuarios (un usuario puede tener varios roles) |
+| `ruta` | Registrar las paginas del sistema (/producto, /cliente, etc) |
+| `rutarol` | Definir que paginas puede acceder cada rol |
 
 ---
 
-## Tablas necesarias en la base de datos
+## Tablas necesarias - SQL
 
 Ejecute este SQL en PostgreSQL (en orden):
 
