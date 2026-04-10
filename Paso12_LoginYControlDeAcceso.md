@@ -1,5 +1,11 @@
 # Paso 12: Login y Control de Acceso
 
+## Los 3 conceptos clave de seguridad
+
+1. **Autenticacion** → ¿Quien eres? (login, BCrypt, JWT)
+2. **Autorizacion** → ¿Que puedes hacer? (roles, rutas, permisos)
+3. **Encriptacion** → ¿Como se protege? (BCrypt para contrasenas, SECRET_KEY para la sesion, HTTPS para transporte)
+
 ## Que se implemento
 
 Este paso agrega autenticacion completa al proyecto:
