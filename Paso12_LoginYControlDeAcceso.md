@@ -160,58 +160,88 @@ La API generica C# maneja BCrypt automaticamente:
 
 Para que la recuperacion de contrasena envie correos, se necesita configurar SMTP en `config.py`. Aqui se explica paso a paso con Gmail.
 
-### Paso 1: Activar verificacion en 2 pasos
+### Paso 1: Crear una cuenta de Gmail (si no tiene una para el proyecto)
 
-1. Ir a [https://myaccount.google.com/security](https://myaccount.google.com/security)
-2. En la seccion **"Como inicias sesion en Google"**, buscar **"Verificacion en 2 pasos"**
-3. Si dice "Desactivada", hacer clic y seguir los pasos para activarla
-4. Google pedira un numero de telefono para enviar codigos de verificacion
-5. Completar la configuracion
+1. Ir a https://accounts.google.com/signup
+2. Crear una cuenta nueva (ej: `mi.proyecto.2026@gmail.com`)
+3. Completar el registro con nombre, fecha de nacimiento, etc.
+4. Agregar un numero de telefono (lo va a necesitar en el paso 2)
 
-> **¿Por que?** Google no permite usar App Passwords sin verificacion en 2 pasos.
-> Es un requisito de seguridad obligatorio.
+### Paso 2: Activar la verificacion en 2 pasos
 
-### Paso 2: Crear una App Password (contrasena de aplicacion)
+Google NO permite crear App Passwords sin verificacion en 2 pasos.
+Es un requisito obligatorio. Siga estos pasos:
 
-1. Ir a [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-   - Si el link no funciona, buscar en Google: "Google App Passwords"
-   - O ir a: Google Account → Security → 2-Step Verification → App passwords
-2. En **"Nombre de la app"**, escribir: `FlaskLogin` (o cualquier nombre descriptivo)
+1. Abrir el navegador e ir a: https://myaccount.google.com/security
+2. Iniciar sesion con la cuenta de Gmail del paso 1
+3. Bajar en la pagina hasta la seccion **"Como inicias sesion en Google"**
+4. Buscar **"Verificacion en dos pasos"** (dira "desactivada")
+5. Hacer clic en **"Verificacion en dos pasos"**
+6. Se abre una pagina nueva. Hacer clic en el boton **"Activar verificacion en dos pasos"**
+7. Google le pedira confirmar con su telefono:
+   - Seleccionar el pais (+57 Colombia)
+   - Escribir su numero de celular
+   - Elegir "Mensaje de texto" o "Llamada"
+   - Hacer clic en "Enviar"
+8. Escribir el codigo de 6 digitos que le llego al celular
+9. Hacer clic en **"Activar"**
+10. Verificar que ahora dice **"Activada"** en la seccion de seguridad
+
+### Paso 3: Crear una App Password (contrasena de aplicacion)
+
+Una App Password es una contrasena especial de 16 caracteres que
+solo sirve para aplicaciones externas. La contrasena normal de Gmail
+NO funciona para SMTP.
+
+1. Ir a: https://myaccount.google.com/apppasswords
+   - Si no le deja entrar, es porque el paso 2 no se completo
+   - Vuelva al paso 2 y verifique que la verificacion en 2 pasos esta "Activada"
+2. En **"Nombre de la app"** escribir: `FlaskLogin` (o cualquier nombre)
 3. Hacer clic en **"Crear"**
-4. Google mostrara una contrasena de 16 caracteres, algo como: `abcd efgh ijkl mnop`
-5. **Copiarla inmediatamente** (solo se muestra una vez)
-6. Quitar los espacios: `abcdefghijklmnop`
+4. Google muestra una contrasena de 16 caracteres, algo como: `pcsa qfto hhjf sadv`
+5. **Copiarla inmediatamente** — solo se muestra UNA vez
+6. Si la pierde, puede crear otra (y la anterior deja de funcionar)
 
-> **IMPORTANTE**: Esta NO es la contrasena normal de Gmail.
-> Es una contrasena especial que solo sirve para aplicaciones externas.
-> La contrasena normal de Gmail NO funciona para SMTP.
+### Paso 4: Configurar config.py
 
-### Paso 3: Configurar config.py
-
-Abrir `config.py` y llenar las variables SMTP:
+Abrir `config.py` del proyecto y poner los datos:
 
 ```python
 # SMTP (configurar para recuperacion de contrasena)
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 587
-SMTP_USER = "tucuenta@gmail.com"        # Tu email de Gmail
-SMTP_PASS = "abcdefghijklmnop"          # La App Password (16 chars, sin espacios)
-SMTP_FROM = "tucuenta@gmail.com"        # Mismo email (remitente)
+SMTP_USER = "mi.proyecto.2026@gmail.com"        # La cuenta de Gmail del paso 1
+SMTP_PASS = "pcsa qfto hhjf sadv"               # La App Password del paso 3 (NO la contrasena de Gmail)
+SMTP_FROM = "mi.proyecto.2026@gmail.com"         # Misma cuenta (remitente)
 ```
 
-### Paso 4: Probar
+### Paso 5: Probar
 
 1. Ejecutar la aplicacion: `python app.py`
 2. Ir a `http://localhost:5300/recuperar-contrasena`
 3. Ingresar un email que exista en la tabla `usuario`
 4. Si todo esta bien, el usuario recibira un correo con la contrasena temporal
+5. Si SMTP no esta configurado, muestra un warning pero la contrasena se cambia en la BD
 
-### Si NO quiere configurar SMTP
+### Si algo no funciona
 
-La recuperacion de contrasena funciona **sin SMTP**, pero:
-- La contrasena temporal se cambia en la BD (si funciona)
-- El correo NO se envia (muestra un warning: "no se pudo enviar el correo")
-- El administrador debe comunicar la contrasena temporal manualmente al usuario
+| Problema | Solucion |
+|----------|----------|
+| "App passwords not available" | El paso 2 no se completo. Verificar que dice "Activada" |
+| "Username and Password not accepted" | Usar la App Password del paso 3, NO la contrasena de Gmail |
+| "SMTP no configurado" | Llenar SMTP_USER y SMTP_PASS en config.py |
+| "Connection refused" | Verificar que el firewall no bloquee el puerto 587 |
+| No llega el correo | Revisar la carpeta de **spam** del destinatario |
+| Perdio la App Password | Ir al paso 3 y crear una nueva |
+
+### Alternativas a Gmail
+
+| Proveedor | Host | Puerto | Notas |
+|-----------|------|--------|-------|
+| Gmail | smtp.gmail.com | 587 | Requiere App Password (pasos 2 y 3) |
+| Outlook/Hotmail | smtp-mail.outlook.com | 587 | Contrasena normal funciona |
+| Yahoo | smtp.mail.yahoo.com | 587 | Requiere App Password |
+| Mailtrap (pruebas) | sandbox.smtp.mailtrap.io | 587 | Gratis para desarrollo, no envia correos reales |
 
 ### Problemas comunes
 
