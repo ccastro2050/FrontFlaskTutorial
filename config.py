@@ -12,6 +12,6 @@ SECRET_KEY = "clave-secreta-flask-frontend-2024"
 # SMTP (configurar para recuperacion de contrasena)
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 587
-SMTP_USER = ""
-SMTP_PASS = ""
-SMTP_FROM = ""
+SMTP_USER = "front.tutorial2026@gmail.com"
+SMTP_PASS = "pcsa qfto hhjf sadv"
+SMTP_FROM = "front.tutorial2026@gmail.com"
