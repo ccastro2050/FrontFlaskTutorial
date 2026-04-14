@@ -37,8 +37,21 @@ COMO FUNCIONA LA AUTENTICACION:
 2. Este servicio envia esos datos a la API generica C# (POST /api/autenticacion/token).
 3. La API verifica la contrasena usando BCrypt (la contrasena se guarda encriptada en la BD).
 4. Si es correcta, la API devuelve un token JWT.
-5. Luego se consultan los ROLES del usuario (que puede hacer) y las RUTAS permitidas
-   (a que paginas puede acceder).
+5. Luego se consultan los ROLES y las RUTAS del usuario con UNA SOLA consulta SQL
+   a ConsultasController (POST /api/consultas/ejecutarconsultaparametrizada).
+   La consulta hace JOINs de 5 tablas y filtra por email en la BD.
+
+FORMA ANTERIOR (sin ConsultasController — 5 llamadas HTTP separadas):
+=====================================================================
+Antes, los roles y rutas se cargaban con 5 GETs al CRUD generico:
+  GET /api/usuario          -> TODOS los usuarios, buscar nombre
+  GET /api/rol_usuario      -> TODOS los rol_usuario, filtrar por email
+  GET /api/rol              -> TODOS los roles, mapear ids a nombres
+  GET /api/rutarol          -> TODOS los rutarol, filtrar por rol
+  GET /api/ruta             -> TODAS las rutas, mapear ids a paths
+Problema: traia tablas COMPLETAS y filtraba en Python (ineficiente).
+Ahora: 1 sola consulta SQL filtra en la BD (mas rapido y eficiente).
+Los metodos del enfoque anterior se conservan como fallback (ver abajo).
 
 TABLAS INVOLUCRADAS:
 ====================
@@ -169,6 +182,42 @@ class AuthService:
         return "id"
 
     # ──────────────────────────────────────────────────────────
+    # HELPER: Ejecutar consulta SQL via ConsultasController
+    # ──────────────────────────────────────────────────────────
+    # ConsultasController permite ejecutar SQL con JOINs en la BD.
+    # Se usa para cargar roles y rutas en 1 sola llamada en vez de 5.
+    #
+    # DIFERENCIA:
+    #   Listar (GET /api/{tabla})     -> trae TODA la tabla, filtrar en Python
+    #   PostConsulta (POST /api/consultas) -> SQL con WHERE, filtrar en la BD
+    # ──────────────────────────────────────────────────────────
+
+    def _post_consulta(self, consulta, parametros=None):
+        """
+        Ejecuta una consulta SQL parametrizada via ConsultasController.
+        Endpoint: POST /api/consultas/ejecutarconsultaparametrizada
+        Retorna lista de diccionarios con los resultados.
+
+        El parametro @email previene inyeccion SQL (parametrizado por la API).
+        """
+        try:
+            resp = self.session.post(
+                f"{self.base_url}/api/consultas/ejecutarconsultaparametrizada",
+                json={
+                    "consulta": consulta,
+                    "parametros": parametros or {}
+                },
+                timeout=30
+            )
+            if resp.ok:
+                data = resp.json()
+                # ConsultasController retorna "resultados" o "Resultados"
+                return data.get("resultados", data.get("Resultados", []))
+            return []
+        except Exception:
+            return []
+
+    # ──────────────────────────────────────────────────────────
     # LOGIN: Verificar credenciales contra la API
     # ──────────────────────────────────────────────────────────
     def login(self, email, contrasena):
@@ -194,14 +243,135 @@ class AuthService:
         except Exception as e:
             return False, {"mensaje": str(e)}
 
+    # ══════════════════════════════════════════════════════════
+    # ROLES Y RUTAS: Una sola consulta SQL via ConsultasController
+    # ══════════════════════════════════════════════════════════
+    #
+    # ANTES: 5 llamadas GET separadas a EntidadesController
+    #   GET /api/usuario, GET /api/rol_usuario, GET /api/rol,
+    #   GET /api/rutarol, GET /api/ruta
+    #   -> Traia tablas COMPLETAS y filtraba en Python
+    #
+    # AHORA: 1 llamada POST a ConsultasController
+    #   POST /api/consultas/ejecutarconsultaparametrizada
+    #   -> SQL con JOINs, WHERE filtra en la BD
+    #   -> Solo viajan las filas de ESTE usuario
+    # ══════════════════════════════════════════════════════════
+
+    def obtener_roles_y_rutas(self, email):
+        """
+        Obtiene roles y rutas del usuario con UNA SOLA consulta SQL.
+        Usa ConsultasController (POST /api/consultas/ejecutarconsultaparametrizada).
+
+        La consulta SQL se arma DINAMICAMENTE con los FK/PK descubiertos:
+          SELECT r.nombre AS nombre_rol, ruta_t.ruta
+          FROM usuario u
+          JOIN rol_usuario rolu ON u.{pk} = rolu.{fk_email}
+          JOIN rol r ON rolu.{fk_rol} = r.{pk_rol}
+          JOIN rutarol rr ON r.{pk_rol} = rr.{fk_rol2}
+          JOIN ruta ruta_t ON rr.{fk_ruta} = ruta_t.{pk_ruta}
+          WHERE u.{pk} = @email
+
+        Retorna (roles_list, rutas_set).
+        Si ConsultasController falla, usa los metodos fallback (5 GETs).
+        """
+        try:
+            # Descubrir FK/PK de la estructura
+            pk_usuario = self._obtener_pk("usuario")
+            pk_rol = self._obtener_pk("rol")
+            pk_ruta = self._obtener_pk("ruta")
+            fk_email = self._obtener_fk("rol_usuario", "usuario")
+            fk_rol_en_rolusuario = self._obtener_fk("rol_usuario", "rol")
+            fk_rol_en_rutarol = self._obtener_fk("rutarol", "rol")
+            fk_ruta_en_rutarol = self._obtener_fk("rutarol", "ruta")
+
+            # Si faltan FKs criticos, usar fallback (5 GETs)
+            if not fk_email or not fk_rol_en_rolusuario or not fk_rol_en_rutarol:
+                roles = self._obtener_roles_fallback(email)
+                rutas = self._obtener_rutas_fallback(roles)
+                return roles, rutas
+
+            # Armar la consulta SQL dinamicamente
+            sql = (
+                f"SELECT r.nombre AS nombre_rol, ruta_t.ruta "
+                f"FROM usuario u "
+                f"JOIN rol_usuario rolu ON u.{pk_usuario} = rolu.{fk_email} "
+                f"JOIN rol r ON rolu.{fk_rol_en_rolusuario} = r.{pk_rol} "
+                f"JOIN rutarol rr ON r.{pk_rol} = rr.{fk_rol_en_rutarol} "
+                f"JOIN ruta ruta_t ON rr.{fk_ruta_en_rutarol} = ruta_t.{pk_ruta} "
+                f"WHERE u.{pk_usuario} = @email"
+            )
+
+            # Ejecutar via ConsultasController
+            resultados = self._post_consulta(sql, {"email": email})
+
+            # Si no devolvio resultados, intentar fallback
+            if not resultados:
+                roles = self._obtener_roles_fallback(email)
+                rutas = self._obtener_rutas_fallback(roles)
+                return roles, rutas
+
+            # Extraer roles y rutas unicos del resultado
+            roles = []
+            rutas = set()
+            for fila in resultados:
+                nombre_rol = fila.get("nombre_rol", "")
+                if nombre_rol and nombre_rol not in roles:
+                    roles.append(nombre_rol)
+                ruta = fila.get("ruta", "")
+                if ruta:
+                    rutas.add(ruta)
+
+            return roles, rutas
+        except Exception:
+            # Fallback completo si algo falla
+            roles = self._obtener_roles_fallback(email)
+            rutas = self._obtener_rutas_fallback(roles)
+            return roles, rutas
+
     # ──────────────────────────────────────────────────────────
-    # ROLES: Obtener que roles tiene el usuario
+    # COMPATIBILIDAD: metodos individuales para auth.py
     # ──────────────────────────────────────────────────────────
+    # auth.py llama primero obtener_roles_usuario(email) y luego
+    # obtener_rutas_permitidas(roles). Para no hacer 2 consultas SQL,
+    # obtener_roles_usuario cachea las rutas en _rutas_cache
+    # y obtener_rutas_permitidas las lee de ahi.
+    # ──────────────────────────────────────────────────────────
+
     def obtener_roles_usuario(self, email):
         """
-        Obtiene los nombres de roles asignados al usuario.
-        Consulta rol_usuario (email->rol_id) y rol (id->nombre).
+        Obtiene roles del usuario. Usa ConsultasController internamente.
+        Tambien cachea las rutas para que obtener_rutas_permitidas() no
+        tenga que hacer otra consulta.
         """
+        roles, rutas = self.obtener_roles_y_rutas(email)
+        # Cachear rutas para la llamada posterior de obtener_rutas_permitidas
+        self._rutas_cache = rutas
+        return roles
+
+    def obtener_rutas_permitidas(self, roles):
+        """
+        Obtiene rutas permitidas segun los roles.
+        Si obtener_roles_usuario() ya se llamo, usa las rutas cacheadas
+        (evita hacer otra consulta SQL). Si no, usa el fallback.
+        """
+        # Si ya se cachearon las rutas en obtener_roles_usuario, usarlas
+        if hasattr(self, '_rutas_cache') and self._rutas_cache:
+            rutas = self._rutas_cache
+            self._rutas_cache = None  # Limpiar cache
+            return rutas
+        # Fallback: obtener rutas con GETs separados
+        return self._obtener_rutas_fallback(roles)
+
+    # ══════════════════════════════════════════════════════════
+    # FALLBACK: Metodos del enfoque anterior (5 GETs separados)
+    # ══════════════════════════════════════════════════════════
+    # Se usan si ConsultasController no esta disponible o falla.
+    # Son los mismos metodos del enfoque anterior.
+    # ══════════════════════════════════════════════════════════
+
+    def _obtener_roles_fallback(self, email):
+        """[FALLBACK] Carga roles con 2 GETs separados (enfoque anterior)."""
         try:
             fk_email = self._obtener_fk("rol_usuario", "usuario")
             fk_rol = self._obtener_fk("rol_usuario", "rol")
@@ -227,14 +397,8 @@ class AuthService:
         except Exception:
             return []
 
-    # ──────────────────────────────────────────────────────────
-    # RUTAS PERMITIDAS: A que paginas puede acceder
-    # ──────────────────────────────────────────────────────────
-    def obtener_rutas_permitidas(self, roles):
-        """
-        Obtiene las rutas (paginas) permitidas segun los roles.
-        El middleware usara este set para permitir o bloquear acceso.
-        """
+    def _obtener_rutas_fallback(self, roles):
+        """[FALLBACK] Carga rutas con 3 GETs separados (enfoque anterior)."""
         try:
             fk_rol_en_rutarol = self._obtener_fk("rutarol", "rol")
             fk_ruta_en_rutarol = self._obtener_fk("rutarol", "ruta")
@@ -251,7 +415,6 @@ class AuthService:
             ).json().get("datos", [])
             rol_ids = {str(r[pk_rol]) for r in roles_data if r.get("nombre") in roles}
 
-            # Obtener rutas completas para resolver el path
             rutas_data = self.session.get(
                 f"{self.base_url}/api/ruta", params={"limite": SIN_LIMITE}, timeout=30
             ).json().get("datos", [])
@@ -260,7 +423,6 @@ class AuthService:
             rutas = set()
             for rr in rutas_rol:
                 if str(rr.get(fk_rol_en_rutarol, "")) in rol_ids:
-                    # Intentar obtener la ruta del campo FK o de un campo "ruta" directo
                     ruta = ""
                     if fk_ruta_en_rutarol:
                         ruta_id = str(rr.get(fk_ruta_en_rutarol, ""))

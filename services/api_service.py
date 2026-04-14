@@ -3,9 +3,14 @@ api_service.py - Servicio generico que consume la API REST.
 
 Contiene los 4 metodos CRUD (Listar, Crear, Actualizar, Eliminar)
 que se reutilizan en todos los Blueprints/rutas.
+
+JWT: Si el usuario hizo login, el token JWT se guarda en session["token"].
+Este servicio lo lee y lo envia en el header Authorization de cada peticion.
+Sin esto, la API rechaza las peticiones con 401 Unauthorized (si tiene [Authorize]).
 """
 
 import requests
+from flask import session as flask_session
 from config import API_BASE_URL
 
 
@@ -14,6 +19,19 @@ class ApiService:
 
     def __init__(self):
         self.base_url = API_BASE_URL
+
+    def _headers(self):
+        """
+        Arma los headers HTTP para cada peticion.
+        Si hay token JWT en la sesion de Flask, lo agrega como:
+          Authorization: Bearer eyJhbG...
+        Sin esto, la API responde 401 si tiene [Authorize].
+        """
+        h = {"Content-Type": "application/json"}
+        token = flask_session.get("token")
+        if token:
+            h["Authorization"] = f"Bearer {token}"
+        return h
 
     # ──────────────────────────────────────────────
     # LISTAR: GET /api/{tabla}
@@ -25,7 +43,7 @@ class ApiService:
             if limite:
                 params['limite'] = limite
 
-            respuesta = requests.get(url, params=params)
+            respuesta = requests.get(url, params=params, headers=self._headers())
             datos_json = respuesta.json()
             return datos_json.get("datos", [])
 
@@ -39,7 +57,7 @@ class ApiService:
     def crear(self, tabla, datos):
         try:
             url = f"{self.base_url}/api/{tabla}"
-            respuesta = requests.post(url, json=datos)
+            respuesta = requests.post(url, json=datos, headers=self._headers())
             contenido = respuesta.json()
             mensaje = contenido.get("mensaje", "Operacion completada.")
             return (respuesta.ok, mensaje)
@@ -53,7 +71,7 @@ class ApiService:
     def actualizar(self, tabla, nombre_clave, valor_clave, datos):
         try:
             url = f"{self.base_url}/api/{tabla}/{nombre_clave}/{valor_clave}"
-            respuesta = requests.put(url, json=datos)
+            respuesta = requests.put(url, json=datos, headers=self._headers())
             contenido = respuesta.json()
             mensaje = contenido.get("mensaje", "Operacion completada.")
             return (respuesta.ok, mensaje)
@@ -67,7 +85,7 @@ class ApiService:
     def eliminar(self, tabla, nombre_clave, valor_clave):
         try:
             url = f"{self.base_url}/api/{tabla}/{nombre_clave}/{valor_clave}"
-            respuesta = requests.delete(url)
+            respuesta = requests.delete(url, headers=self._headers())
             contenido = respuesta.json()
             mensaje = contenido.get("mensaje", "Operacion completada.")
             return (respuesta.ok, mensaje)
@@ -87,7 +105,7 @@ class ApiService:
             if parametros:
                 payload.update(parametros)
 
-            respuesta = requests.post(url, json=payload)
+            respuesta = requests.post(url, json=payload, headers=self._headers())
             contenido = respuesta.json()
 
             if not respuesta.ok:
