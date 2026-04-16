@@ -439,15 +439,33 @@ class AuthService:
     # DATOS DEL USUARIO: nombre, flags, etc.
     # ──────────────────────────────────────────────────────────
     def obtener_datos_usuario(self, email):
-        """Obtiene todos los datos del usuario desde la tabla."""
+        """Verifica si el usuario existe usando POST /api/usuario/verificar-contrasena.
+        Este endpoint es [AllowAnonymous] y siempre lo sera (es el de login).
+        No necesita JWT, asi que funciona para recuperar contrasena cuando
+        el usuario NO esta logueado.
+
+        Logica: enviamos una contrasena dummy. Si la API responde:
+          - 404: el usuario NO existe -> retorna {}
+          - 401: el usuario SI existe (contrasena incorrecta) -> retorna {email}
+          - 200: el usuario SI existe (coincidio) -> retorna {email}
+        """
         try:
             pk_usuario = self._obtener_pk("usuario")
-            usuarios = self.session.get(
-                f"{self.base_url}/api/usuario", params={"limite": SIN_LIMITE}, timeout=30
-            ).json().get("datos", [])
-            for u in usuarios:
-                if str(u.get(pk_usuario, "")).strip().lower() == email.strip().lower():
-                    return u
+            resp = self.session.post(
+                f"{self.base_url}/api/usuario/verificar-contrasena",
+                json={
+                    "campoUsuario": pk_usuario,
+                    "campoContrasena": "contrasena",
+                    "valorUsuario": email,
+                    "valorContrasena": "__verificacion_existencia__"
+                },
+                timeout=30
+            )
+            # 401 = existe pero contrasena incorrecta (lo esperado)
+            # 200 = existe y coincidio (improbable con dummy)
+            if resp.status_code in (200, 401):
+                return {pk_usuario: email}
+            # 404 = no existe
         except Exception:
             pass
         return {}
