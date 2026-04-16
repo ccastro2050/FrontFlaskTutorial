@@ -14,7 +14,8 @@ Fuentes:
 - Repositorio oficial: [github.com/github/spec-kit](https://github.com/github/spec-kit)
 - Documento tecnico: [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md)
 - Blog Microsoft: [Diving Into Spec-Driven Development With GitHub Spec Kit](https://developer.microsoft.com/blog/spec-driven-development-spec-kit)
-- Video: [La forma CORRECTA de programar con IA en 2026: SDD](https://youtu.be/p2WA672HrdI)
+- Video conceptual: [La forma CORRECTA de programar con IA en 2026: SDD](https://youtu.be/p2WA672HrdI)
+- Video tutorial: [GitHub Spec Kit - Tutorial completo con ejemplo practico](https://youtu.be/QzSCmSFKvko)
 
 ---
 

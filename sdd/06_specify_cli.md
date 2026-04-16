@@ -257,11 +257,68 @@ Para features futuras, se puede usar `/speckit-specify` que creara una carpeta
 - Blog Microsoft: [Diving Into SDD With Spec Kit](https://developer.microsoft.com/blog/spec-driven-development-spec-kit)
 - Paquete npm: [@spec-kit/cli](https://www.npmjs.com/package/@spec-kit/cli)
 - Video SDD: [La forma CORRECTA de programar con IA en 2026](https://youtu.be/p2WA672HrdI)
+- Video tutorial: [GitHub Spec Kit - Tutorial Completo con ejemplo](https://youtu.be/QzSCmSFKvko)
 - DeepWiki: [Instalacion Spec-Kit](https://deepwiki.com/github/spec-kit/2.1-installation)
 
 ---
 
-## 9. Fecha y version
+## 9. Documentacion generada con Spec-Kit (llenada)
+
+Despues de `specify init`, las plantillas estaban vacias (con placeholders).
+Se llenaron manualmente con los datos reales del proyecto, siguiendo el formato
+oficial de Spec-Kit.
+
+### Archivos llenados
+
+| Archivo | Estado anterior | Estado actual |
+|---------|----------------|---------------|
+| `.specify/memory/constitution.md` | Placeholders `[PROJECT_NAME]`, `[PRINCIPLE_1]` | Lleno: 6 principios (API-First, Descubrimiento Dinamico, Seguridad 3 Capas, SOLID, ACID, Simplicidad) + stack + convenciones + prohibiciones + patrones |
+| `.specify/specs/012-login-y-control-acceso/spec.md` | No existia | Creado: 5 User Stories con Given/When/Then (login, control acceso, JWT, cambiar pwd, recuperar pwd) |
+| `.specify/specs/012-login-y-control-acceso/plan.md` | No existia | Creado: arquitectura, componentes, endpoints, security design, rationale |
+| `.specify/specs/012-login-y-control-acceso/tasks.md` | No existia | Creado: tareas por story con [P], todas completadas, validacion final |
+
+### Relacion entre sdd/ y .specify/
+
+```
+sdd/                                    .specify/
+(creado ANTES de instalar CLI)          (creado por specify init + llenado despues)
+(formato libre, contenido extenso)      (formato Spec-Kit oficial)
+                                        
+01_constitucion.md (322 lineas)    <->  memory/constitution.md (formato oficial)
+02_especificacion.md (244 lineas)  <->  specs/012-login/spec.md (Given/When/Then)
+03_clarificacion.md (131 lineas)        (no tiene equivalente directo)
+04_plan.md (510 lineas, diagramas) <->  specs/012-login/plan.md (formato oficial)
+05_tareas.md (221 lineas)          <->  specs/012-login/tasks.md (formato oficial)
+data-model.md (224 lineas, SQL)         (no tiene equivalente - se crea por feature)
+06_specify_cli.md (ESTE archivo)        (no tiene equivalente)
+```
+
+**sdd/** tiene contenido mas extenso y educativo (tutorial, con SOLID, ACID, diagramas Mermaid).
+**.specify/** tiene contenido en formato estandar de Spec-Kit (Given/When/Then, componentes, rationale).
+
+Ambas carpetas coexisten y se complementan. **Ninguna se borra.**
+
+---
+
+## 10. Diagramas Mermaid (mejora sobre Spec-Kit)
+
+Segun el video [GitHub Spec Kit - Tutorial Completo](https://youtu.be/QzSCmSFKvko):
+
+> "Como algo malo [de Spec-Kit] es quiza la falta de uso de Mermaid. En mis
+> proyectos siempre tengo un diagrama entidad-relacion para facilitarle a la IA
+> que entienda la estructura de mi base de datos, asi como diagramas de secuencia
+> para que entienda la arquitectura o un diagrama de flujo para los flujos."
+
+**En este proyecto SI incluimos diagramas Mermaid** (en `sdd/04_plan.md`):
+- 5 diagramas de secuencia (login, CRUD listar, CRUD crear, acceso denegado, cambiar contrasena)
+- 1 diagrama de clases (ApiService, AuthService, Blueprints, Middleware)
+- Diagrama ER en `sdd/data-model.md`
+
+Esto complementa lo que Spec-Kit no incluye por defecto.
+
+---
+
+## 11. Fecha y version
 
 - **Fecha de instalacion**: 2026-04-14
 - **specify-cli version**: 0.7.2.dev0
