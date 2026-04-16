@@ -1,8 +1,8 @@
-# Etapa 5: Tareas y Codigo
+# Etapa 5: Tareas y Código
 
-> Segun [Spec-Kit](https://github.com/github/spec-kit): las tareas se derivan del plan y
-> se organizan por historia de usuario. Cada tarea tiene ruta de archivo especifica
-> y marcadores de paralelizacion `[P]`. Se generan con `/speckit.tasks`.
+> Según [Spec-Kit](https://github.com/github/spec-kit): las tareas se derivan del plan y
+> se organizan por historia de usuario. Cada tarea tiene ruta de archivo específica
+> y marcadores de paralelización `[P]`. Se generan con `/speckit.tasks`.
 >
 > Referencia: [tasks-template.md](https://github.com/github/spec-kit/blob/main/templates/plan-template.md)
 
@@ -13,7 +13,7 @@
 - `[x]` = Completado
 - `[ ]` = Pendiente
 - `[P]` = Paralelizable (puede hacerse al mismo tiempo que otra tarea [P])
-- `->` = Dependencia (requiere que la tarea anterior este completada)
+- `->` = Dependencia (requiere que la tarea anterior esté completada)
 
 ---
 
@@ -42,20 +42,20 @@
 
 - [x] Crear `services/api_service.py` con clase `ApiService`
   - Archivo: `services/api_service.py`
-  - Metodos: `listar()`, `crear()`, `actualizar()`, `eliminar()`
-- [x] Verificar conexion con la API: `GET /api/producto`
+  - Métodos: `listar()`, `crear()`, `actualizar()`, `eliminar()`
+- [x] Verificar conexión con la API: `GET /api/producto`
 - [x] Merge a main
 
 ---
 
-## Historia 3: Layout y navegacion (Paso 5)
+## Historia 3: Layout y navegación (Paso 5)
 
 **Estudiante 1 — Rama: layout**
 
 - [x] Crear `templates/layout/base.html` con Bootstrap 5 CDN
   - Sidebar + top-row + content area
 - [x] Crear `templates/components/nav_menu.html` con links
-- [x] Crear `templates/pages/home.html` (pagina inicio)
+- [x] Crear `templates/pages/home.html` (página inicio)
 - [x] Crear `routes/home.py` con Blueprint
 - [x] Registrar blueprint en `app.py`
 - [x] Crear `static/css/app.css` con variables CSS
@@ -116,7 +116,7 @@
 **Estudiante 2 — Rama: feature/factura**
 -> Depende de: Historia 6 + Historia 7
 
-- [x] Crear `routes/factura.py` con logica maestro-detalle
+- [x] Crear `routes/factura.py` con lógica maestro-detalle
   - Cabecera: vendedor (select FK), cliente (select FK), fecha
   - Detalle: tabla dinamica con producto, cantidad, precio
 - [x] Crear `templates/pages/factura.html`
@@ -131,10 +131,10 @@
 **Estudiante 1 — Rama: feature/login**
 -> Depende de: Todas las historias anteriores
 
-### 9.1 Servicio de autenticacion
+### 9.1 Servicio de autenticación
 - [x] Crear `services/auth_service.py`
   - Archivo: `services/auth_service.py`
-  - Descubrimiento dinamico FK/PK via `/api/estructuras/basedatos`
+  - Descubrimiento dinámico FK/PK vía `/api/estructuras/basedatos`
   - `_post_consulta()`: POST a ConsultasController
   - `obtener_roles_y_rutas()`: 1 SQL con JOINs (roles + rutas)
   - `obtener_roles_usuario()`: llama `obtener_roles_y_rutas`, cachea rutas
@@ -147,16 +147,16 @@
 - [x] Crear `middleware/auth_middleware.py`
   - Archivo: `middleware/auth_middleware.py`
   - `crear_middleware(app)`: registra `before_request` + `context_processor`
-  - Rutas publicas: `/login`, `/logout`, `/static`, `/recuperar-contrasena`
-  - Sin sesion -> redirect `/login`
-  - Ruta no permitida -> pagina 403
+  - Rutas públicas: `/login`, `/logout`, `/static`, `/recuperar-contrasena`
+  - Sin sesión -> redirect `/login`
+  - Ruta no permitida -> página 403
 
-### 9.3 Rutas de autenticacion
+### 9.3 Rutas de autenticación
 - [x] Crear `routes/auth.py` con Blueprint
   - `/login` GET/POST, `/logout`, `/cambiar-contrasena`, `/recuperar-contrasena`
   - Guardar token JWT en `session["token"]`
   - Verificar roles no vacios
-  - Validacion contrasena (6 chars, mayuscula, numero)
+  - Validación contraseña (6 chars, mayúscula, número)
 
 ### 9.4 JWT en ApiService
 - [x] Modificar `services/api_service.py`
@@ -165,31 +165,31 @@
 
 ### 9.5 Templates de auth
 - [x] `templates/pages/login.html` — formulario login
-- [x] `templates/pages/cambiar_contrasena.html` — cambiar contrasena
-- [x] `templates/pages/recuperar_contrasena.html` — recuperar contrasena
-- [x] `templates/pages/sin_acceso.html` — pagina 403
+- [x] `templates/pages/cambiar_contrasena.html` — cambiar contraseña
+- [x] `templates/pages/recuperar_contrasena.html` — recuperar contraseña
+- [x] `templates/pages/sin_acceso.html` — página 403
 
 ### 9.6 Servicio email
-- [x] Crear `services/email_service.py` — SMTP para contrasena temporal
+- [x] Crear `services/email_service.py` — SMTP para contraseña temporal
 
 ### 9.7 Modificar existentes
 - [x] `app.py`: agregar `crear_middleware(app)` + `auth_bp`
 - [x] `templates/layout/base.html`: agregar boton login/logout en top-row
 - [x] `config.py`: agregar variables SMTP
 
-### 9.8 Documentacion
+### 9.8 Documentación
 - [x] Crear `Paso12_LoginYControlDeAcceso.md` — documento completo
 
 ---
 
-## Validacion final
+## Validación final
 
 - [x] Login con usuario sin roles -> "No tiene roles asignados"
 - [x] Login con usuario con rol Contador -> entra, solo ve sus rutas
 - [x] Login con usuario con todos los roles -> acceso total
-- [x] JWT se envia en cada peticion (verificar en F12 Network)
-- [x] Ruta no permitida -> pagina 403
-- [x] Cambiar contrasena funciona con BCrypt
+- [x] JWT se envía en cada petición (verificar en F12 Network)
+- [x] Ruta no permitida -> página 403
+- [x] Cambiar contraseña funciona con BCrypt
 - [x] Proyecto arranca con `python app.py` sin errores
 
 ---
@@ -205,17 +205,17 @@ Siguiendo [Spec-Kit](https://github.com/github/spec-kit), estos son los artefact
 | clarify | `sdd/03_clarificacion.md` |
 | plan.md | `sdd/04_plan.md` |
 | tasks.md | `sdd/05_tareas.md` (ESTE archivo) |
-| Codigo fuente | `app.py`, `routes/`, `services/`, `templates/`, etc. |
-| Documentacion paso a paso | `Paso0.md` a `Paso12.md` |
+| Código fuente | `app.py`, `routes/`, `services/`, `templates/`, etc. |
+| Documentación paso a paso | `Paso0.md` a `Paso12.md` |
 
-> "Lo mas importante del SDD es que la documentacion es un entregable que se versiona,
-> y el codigo es el resultado de esta documentacion."
+> "Lo más importante del SDD es que la documentación es un entregable que se versiona,
+> y el código es el resultado de esta documentación."
 
 ---
 
 ## Referencias
 
 - [GitHub Spec-Kit](https://github.com/github/spec-kit) — Toolkit oficial SDD
-- [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md) — Documento tecnico SDD
+- [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md) — Documento técnico SDD
 - [Diving Into SDD With Spec Kit (Microsoft)](https://developer.microsoft.com/blog/spec-driven-development-spec-kit)
 - [Video: La forma CORRECTA de programar con IA en 2026](https://youtu.be/p2WA672HrdI)

@@ -1,16 +1,16 @@
-# OpenSpec - Instalacion, Uso y Comparacion con Spec-Kit
+# OpenSpec - Instalación, Uso y Comparación con Spec-Kit
 
 > OpenSpec es el framework open source de [Fission AI](https://github.com/Fission-AI/OpenSpec)
 > para Spec Driven Development (SDD). Con 30.000+ estrellas en GitHub, es compatible con
 > 20+ agentes de IA (Claude Code, Cursor, Copilot, Gemini, OpenCode, etc.).
 >
 > A diferencia de Spec-Kit (GitHub) que es para proyectos nuevos (greenfield),
-> OpenSpec esta disenado para proyectos existentes (brownfield) con el concepto
+> OpenSpec está diseñado para proyectos existentes (brownfield) con el concepto
 > de **delta specs** — cambios incrementales que no reescriben toda la spec.
 
 ---
 
-## 1. Que es OpenSpec
+## 1. Qué es OpenSpec
 
 OpenSpec convierte el SDD en un flujo de trabajo con herramientas reales.
 No es una plantilla de Markdown — es una CLI que se instala con npm y se
@@ -18,16 +18,16 @@ integra con tu agente de IA.
 
 ### 4 principios de OpenSpec
 
-| Principio | Que significa |
+| Principio | Qué significa |
 |-----------|-------------|
-| **Fluido, no rigido** | No hay puertas de fase. Puedes volver atras cuando quieras |
+| **Fluido, no rígido** | No hay puertas de fase. Puedes volver atrás cuando quieras |
 | **Iterativo, no waterfall** | Aprende mientras construyes, refina sobre la marcha |
-| **Facil, no complejo** | Configuracion minima, arranque en segundos |
-| **Brownfield first** | Disenado para proyectos existentes, no solo para nuevos |
+| **Fácil, no complejo** | Configuración mínima, arranque en segundos |
+| **Brownfield first** | Diseñado para proyectos existentes, no solo para nuevos |
 
 ### 4 conceptos fundamentales
 
-| Concepto | Que es | Donde vive |
+| Concepto | Qué es | Dónde vive |
 |----------|--------|-----------|
 | **Specs** | Fuente de verdad: como se comporta el sistema AHORA | `openspec/specs/{dominio}/spec.md` |
 | **Changes** | Propuestas de cambio (carpeta autocontenida) | `openspec/changes/{nombre}/` |
@@ -47,7 +47,7 @@ integra con tu agente de IA.
 
 ### 2.1 Prerrequisitos
 
-| Herramienta | Version minima | Como verificar |
+| Herramienta | Versión mínima | Cómo verificar |
 |------------|---------------|----------------|
 | Node.js | 20.19.0+ | `node --version` |
 | npm | (incluido) | `npm --version` |
@@ -70,7 +70,7 @@ openspec init
 El proceso pregunta que agente de IA usas. Seleccionar `Claude Code`.
 OpenSpec crea los skills en `.claude/skills/` y los comandos en `.claude/commands/`.
 
-### 2.4 Que genera openspec init
+### 2.4 Qué genera openspec init
 
 ```
 tu-proyecto/
@@ -88,7 +88,7 @@ tu-proyecto/
         └── openspec-explore/     <- /opsx:explore
 ```
 
-### 2.5 Desactivar telemetria (opcional)
+### 2.5 Desactivar telemetría (opcional)
 
 ```powershell
 $env:OPENSPEC_TELEMETRY = "0"
@@ -100,27 +100,27 @@ $env:OPENSPEC_TELEMETRY = "0"
 
 ### Comandos principales (perfil core)
 
-| Comando | Que hace | Cuando usarlo |
+| Comando | Qué hace | Cuándo usarlo |
 |---------|----------|--------------|
 | `/opsx:explore` | Modo exploratorio libre, sin crear artefactos | Cuando no tienes claro el enfoque |
-| `/opsx:propose` | Crea un change con TODOS los artefactos (proposal, specs, design, tasks) | Inicio rapido, la mayoria de los casos |
-| `/opsx:apply` | Implementa las tareas del change | Cuando el plan esta listo |
-| `/opsx:archive` | Archiva el change y fusiona delta specs | Cuando todas las tareas estan completas |
+| `/opsx:propose` | Crea un change con TODOS los artefactos (proposal, specs, design, tasks) | Inicio rápido, la mayoría de los casos |
+| `/opsx:apply` | Implementa las tareas del change | Cuando el plan está listo |
+| `/opsx:archive` | Archiva el change y fusiona delta specs | Cuando todas las tareas están completas |
 
 ### Comandos avanzados (perfil expandido)
 
-| Comando | Que hace |
+| Comando | Qué hace |
 |---------|----------|
 | `/opsx:new` | Crea solo la estructura del change (sin artefactos) |
-| `/opsx:continue` | Genera el siguiente artefacto segun dependencias |
+| `/opsx:continue` | Genera el siguiente artefacto según dependencias |
 | `/opsx:ff` | Fast-forward: genera todos los artefactos de golpe |
-| `/opsx:verify` | Valida implementacion contra specs |
+| `/opsx:verify` | Valida implementación contra specs |
 | `/opsx:sync` | Fusiona delta specs sin archivar |
 | `/opsx:bulk-archive` | Archiva varios changes a la vez |
-| `/opsx:onboard` | Tutorial guiado con tu propio codigo |
+| `/opsx:onboard` | Tutorial guiado con tu propio código |
 
 > **Nota**: En Claude Code se usa dos puntos (`/opsx:propose`).
-> En Cursor, OpenCode, Windsurf se usa guion (`/opsx-propose`).
+> En Cursor, OpenCode, Windsurf se usa guión (`/opsx-propose`).
 
 ---
 
@@ -131,17 +131,17 @@ $env:OPENSPEC_TELEMETRY = "0"
 ```
 Paso 1: Explorar la idea
 > /opsx:explore
-> "Necesito agregar exportacion CSV en la pagina de producto"
-> La IA analiza el codigo existente y sugiere enfoques
+> "Necesito agregar exportación CSV en la página de producto"
+> La IA analiza el código existente y sugiere enfoques
 
 Paso 2: Crear el change con artefactos
 > /opsx:propose agregar-csv-producto
 > Genera:
 >   openspec/changes/agregar-csv-producto/
->   ├── proposal.md      <- Por que y que
->   ├── specs/            <- Delta specs (que cambia)
->   ├── design.md         <- Como (enfoque tecnico)
->   └── tasks.md          <- Checklist de implementacion
+>   ├── proposal.md      <- Por qué y qué
+>   ├── specs/            <- Delta specs (qué cambia)
+>   ├── design.md         <- Cómo (enfoque técnico)
+>   └── tasks.md          <- Checklist de implementación
 
 Paso 3: Revisar y ajustar
 > Leer los artefactos, editar si falta algo
@@ -224,82 +224,82 @@ FrontFlaskTutorial/
 
 | Aspecto | sdd/ (Manual) | Spec-Kit (GitHub) | OpenSpec (Fission AI) |
 |---------|---------------|-------------------|----------------------|
-| **Quién genera** | El humano escribe todo | La IA llena templates via /speckit-* | La IA genera artefactos via /opsx:* |
-| **Instalacion** | Ninguna (solo crear archivos .md) | Python + uv + uvx | Node.js + npm |
+| **Quién genera** | El humano escribe todo | La IA llena templates vía /speckit-* | La IA genera artefactos vía /opsx:* |
+| **Instalación** | Ninguna (solo crear archivos .md) | Python + uv + uvx | Node.js + npm |
 | **Complejidad setup** | Cero | Media (uv puede fallar en Windows) | Baja (npm install y listo) |
 | **Formato** | Libre (tu decides la estructura) | Formato fijo (templates oficiales) | Formato fijo (proposal/spec/design/tasks) |
-| **Constitucion** | Si (01_constitucion.md, 322 lineas) | Si (constitution.md, formato oficial) | No (usa config.yaml con context) |
-| **Diagramas Mermaid** | Si (secuencia, clases, ER) | No (falta segun el video) | No |
-| **SOLID, ACID, patrones** | Si (explicados con ejemplos) | No (solo si los escribes) | No |
-| **Delta specs** | No | No | Si (ADDED, MODIFIED, REMOVED) |
-| **Archivado** | No | No | Si (archive/ con fecha) |
-| **Given/When/Then** | No | Si (spec-template.md) | Si (formato BDD) |
-| **Paralelizacion [P]** | Si (manual) | Si (tasks-template.md) | Si (automatico) |
-| **Git extension** | No | Si (/speckit-git-*) | No |
-| **Analyze/Checklist** | No | Si (/speckit-analyze) | Si (/opsx:verify) |
-| **Multiidioma** | Si (escribes en el idioma que quieras) | No (ingles) | Si (ES, PT, ZH, JA, FR, DE) |
-| **Brownfield** | Si (funciona con cualquier proyecto) | Limitado | Disenado para esto |
+| **Constitución** | Sí (01_constitucion.md, 322 líneas) | Sí (constitution.md, formato oficial) | No (usa config.yaml con context) |
+| **Diagramas Mermaid** | Sí (secuencia, clases, ER) | No (falta según el video) | No |
+| **SOLID, ACID, patrones** | Sí (explicados con ejemplos) | No (solo si los escribes) | No |
+| **Delta specs** | No | No | Sí (ADDED, MODIFIED, REMOVED) |
+| **Archivado** | No | No | Sí (archive/ con fecha) |
+| **Given/When/Then** | No | Sí (spec-template.md) | Sí (formato BDD) |
+| **Paralelización [P]** | Sí (manual) | Sí (tasks-template.md) | Sí (automático) |
+| **Git extension** | No | Sí (/speckit-git-*) | No |
+| **Analyze/Checklist** | No | Sí (/speckit-analyze) | Sí (/opsx:verify) |
+| **Multiidioma** | Sí (escribes en el idioma que quieras) | No (inglés) | Sí (ES, PT, ZH, JA, FR, DE) |
+| **Brownfield** | Sí (funciona con cualquier proyecto) | Limitado | Diseñado para esto |
 | **Educativo** | Muy alto (tutorial detallado) | Medio (formato estandar) | Medio (formato estandar) |
-| **Reproducible** | No (cada quien escribe diferente) | Si (templates + slash commands) | Si (propose genera todo igual) |
+| **Reproducible** | No (cada quien escribe diferente) | Sí (templates + slash commands) | Sí (propose genera todo igual) |
 | **Agentes IA** | Cualquiera (es solo Markdown) | Claude, Copilot, Gemini, +10 | Claude, Copilot, Cursor, +20 |
 | **Estrellas GitHub** | N/A | ~5.000 | 30.000+ |
-| **Version** | N/A | 0.7.2 (pre-release) | 1.3.0 (estable) |
+| **Versión** | N/A | 0.7.2 (pre-release) | 1.3.0 (estable) |
 
-### Tabla comparativa: que tiene cada uno
+### Tabla comparativa: qué tiene cada uno
 
 | Documento/Feature | sdd/ (Manual) | .specify/ (Spec-Kit) | openspec/ (OpenSpec) |
 |-------------------|:---:|:---:|:---:|
-| Constitucion / reglas globales | ✅ 01_constitucion.md | ✅ constitution.md | ❌ (usa config.yaml) |
-| Especificacion / spec por feature | ✅ 02_especificacion.md | ✅ specs/{feature}/spec.md | ✅ specs/{dominio}/spec.md |
-| Clarificacion / preguntas | ✅ 03_clarificacion.md | ✅ /speckit-clarify | ✅ /opsx:explore |
-| Plan tecnico | ✅ 04_plan.md | ✅ specs/{feature}/plan.md | ✅ changes/{nombre}/design.md |
+| Constitución / reglas globales | ✅ 01_constitucion.md | ✅ constitution.md | ❌ (usa config.yaml) |
+| Especificación / spec por feature | ✅ 02_especificacion.md | ✅ specs/{feature}/spec.md | ✅ specs/{dominio}/spec.md |
+| Clarificación / preguntas | ✅ 03_clarificacion.md | ✅ /speckit-clarify | ✅ /opsx:explore |
+| Plan técnico | ✅ 04_plan.md | ✅ specs/{feature}/plan.md | ✅ changes/{nombre}/design.md |
 | Tareas ejecutables | ✅ 05_tareas.md | ✅ specs/{feature}/tasks.md | ✅ changes/{nombre}/tasks.md |
 | Modelo de datos (SQL) | ✅ data-model.md | ❌ (se crea manual) | ❌ (se crea manual) |
-| Diagramas secuencia (Mermaid) | ✅ 04_plan.md sec.7 | ❌ | ❌ |
-| Diagrama clases (Mermaid) | ✅ 04_plan.md sec.8 | ❌ | ❌ |
+| Diagramas secuencia (Mermaid) | ✅ 04_plan.md secc.7 | ❌ | ❌ |
+| Diagrama clases (Mermaid) | ✅ 04_plan.md secc.8 | ❌ | ❌ |
 | SOLID explicado con ejemplos | ✅ 01_constitucion.md | ❌ | ❌ |
 | ACID explicado | ✅ 01_constitucion.md | ❌ | ❌ |
-| Patrones de diseno | ✅ 01_constitucion.md | ❌ | ❌ |
+| Patrones de diseño | ✅ 01_constitucion.md | ❌ | ❌ |
 | Delta specs (cambios incrementales) | ❌ | ❌ | ✅ |
 | Archivado de cambios | ❌ | ❌ | ✅ |
 | Proposal (por que + alcance) | ❌ | ❌ | ✅ changes/{}/proposal.md |
 | Given/When/Then (BDD) | ❌ | ✅ | ✅ |
 | Git integration (commits/branches) | ❌ | ✅ /speckit-git-* | ❌ |
-| Guia de instalacion | ✅ 06_specify_cli.md | ✅ GUIA_SPECKIT.md | ✅ 07_openspec.md |
+| Guía de instalación | ✅ 06_specify_cli.md | ✅ GUIA_SPECKIT.md | ✅ 07_openspec.md |
 
 ### Ventajas de cada enfoque
 
-**sdd/ (Manual) — Lo mejor para ensenar**
+**sdd/ (Manual) — Lo mejor para enseñar**
 
-| Ventaja | Por que |
+| Ventaja | Por qué |
 |---------|---------|
 | Total libertad de formato | Puedes incluir SOLID, ACID, patrones, diagramas, lo que quieras |
-| No requiere instalacion | Solo Markdown, funciona en cualquier editor |
+| No requiere instalación | Solo Markdown, funciona en cualquier editor |
 | Diagramas Mermaid | Ni Spec-Kit ni OpenSpec los generan |
 | Contenido educativo | Explicaciones con ejemplos, comparaciones, narrativas |
 | Cualquier idioma | Escribes en espanol directamente |
 | Sin dependencia de herramienta | Si Spec-Kit o OpenSpec desaparecen, tu sdd/ sigue |
 
-**Spec-Kit — Lo mejor para estructura y validacion**
+**Spec-Kit — Lo mejor para estructura y validación**
 
-| Ventaja | Por que |
+| Ventaja | Por qué |
 |---------|---------|
-| Constitucion como concepto formal | Reglas no negociables que la IA respeta |
-| Templates estandar | Todos los specs tienen el mismo formato |
-| /speckit-analyze | Valida que spec, plan y tasks esten alineados |
-| /speckit-checklist | Genera checklist de calidad automatico |
+| Constitución como concepto formal | Reglas no negociables que la IA respeta |
+| Templates estándar | Todos los specs tienen el mismo formato |
+| /speckit-analyze | Valida que spec, plan y tasks estén alineados |
+| /speckit-checklist | Genera checklist de calidad automático |
 | Git extension | Commits y branches estandarizados |
-| Fases claras | Facil de ensenar: 1.Constitution 2.Specify 3.Plan 4.Tasks 5.Implement |
+| Fases claras | Fácil de enseñar: 1.Constitution 2.Specify 3.Plan 4.Tasks 5.Implement |
 
 **OpenSpec — Lo mejor para proyectos existentes**
 
-| Ventaja | Por que |
+| Ventaja | Por qué |
 |---------|---------|
 | Delta specs | Solo documentas LO QUE CAMBIA, no reescribes todo |
 | /opsx:propose | Genera TODO de una vez (proposal + spec + design + tasks) |
 | /opsx:explore | Piensas la idea antes de comprometerte |
 | Archivado | Trazabilidad completa con fechas |
-| npm install | Facil de instalar (los estudiantes ya tienen Node.js) |
+| npm install | Fácil de instalar (los estudiantes ya tienen Node.js) |
 | Multiidioma | Specs en espanol nativo |
 | 30.000+ estrellas | Comunidad activa, actualizaciones frecuentes |
 
@@ -307,16 +307,16 @@ FrontFlaskTutorial/
 
 | Enfoque | Desventaja | Impacto |
 |---------|-----------|---------|
-| **Manual (sdd/)** | No es reproducible (cada quien escribe diferente) | Dificil estandarizar en equipos grandes |
-| **Manual (sdd/)** | No tiene validacion automatica | No sabes si spec y codigo estan alineados |
+| **Manual (sdd/)** | No es reproducible (cada quien escribe diferente) | Difícil estandarizar en equipos grandes |
+| **Manual (sdd/)** | No tiene validación automática | No sabes si spec y código están alineados |
 | **Manual (sdd/)** | Requiere disciplina del humano | Si no escribes, no existe |
 | **Spec-Kit** | No tiene delta specs | Reescribir spec completa para cada cambio |
 | **Spec-Kit** | Pre-release (v0.7.2) | Posibles cambios breaking |
-| **Spec-Kit** | uv puede fallar en Windows | Instalacion complicada para estudiantes |
+| **Spec-Kit** | uv puede fallar en Windows | Instalación complicada para estudiantes |
 | **Spec-Kit** | Sin diagramas Mermaid | Falta visual |
-| **OpenSpec** | No tiene constitucion | Reglas globales no tienen lugar dedicado |
+| **OpenSpec** | No tiene constitución | Reglas globales no tienen lugar dedicado |
 | **OpenSpec** | No tiene Git extension | No integra commits |
-| **OpenSpec** | Requiere Node.js 20.19+ | Version reciente |
+| **OpenSpec** | Requiere Node.js 20.19+ | Versión reciente |
 
 ---
 
@@ -327,38 +327,38 @@ FrontFlaskTutorial/
 | **Repositorio** | [github/spec-kit](https://github.com/github/spec-kit) | [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) |
 | **Estrellas GitHub** | ~5.000 | 30.000+ |
 | **Licencia** | Open source | MIT, open source |
-| **Instalacion** | Python (uv/uvx) | Node.js (npm) |
-| **Version actual** | 0.7.2 | 1.3.0 |
+| **Instalación** | Python (uv/uvx) | Node.js (npm) |
+| **Versión actual** | 0.7.2 | 1.3.0 |
 | **Tipo de proyecto** | Greenfield (nuevo) | Brownfield (existente) |
 | **Agentes soportados** | Claude, Copilot, Gemini, +10 | Claude, Copilot, Cursor, OpenCode, +20 |
 | **Estructura** | `.specify/` | `openspec/` |
-| **Constitucion** | Si (`constitution.md`) | No (usa `config.yaml` con context) |
-| **Delta specs** | No | Si (ADDED, MODIFIED, REMOVED) |
-| **Archivado** | No | Si (`archive/` con fecha) |
-| **Schemas custom** | No | Si (`openspec schema init`) |
-| **Idiomas** | Ingles | Multiidioma (ES, PT, ZH, JA, FR, DE) |
-| **Git extension** | Si (commits, branches) | No (usa git directo) |
-| **Workflows** | Si (workflow.yml) | No |
+| **Constitución** | Sí (`constitution.md`) | No (usa `config.yaml` con context) |
+| **Delta specs** | No | Sí (ADDED, MODIFIED, REMOVED) |
+| **Archivado** | No | Sí (`archive/` con fecha) |
+| **Schemas custom** | No | Sí (`openspec schema init`) |
+| **Idiomas** | Inglés | Multiidioma (ES, PT, ZH, JA, FR, DE) |
+| **Git extension** | Sí (commits, branches) | No (usa git directo) |
+| **Workflows** | Sí (workflow.yml) | No |
 
 ### Ventajas de Spec-Kit para este proyecto
 
-| Ventaja | Por que importa aqui |
+| Ventaja | Por qué importa aquí |
 |---------|---------------------|
-| **Constitucion** | Define reglas no negociables (SOLID, ACID) que la IA no puede violar. OpenSpec no tiene este concepto |
-| **Templates oficiales** | spec-template.md, plan-template.md, tasks-template.md con formato estandar |
-| **Git extension** | Comandos /speckit-git-commit, /speckit-git-feature integrados. Util para los 3 estudiantes |
-| **Analyze + Checklist** | Valida consistencia entre spec, plan y tasks. Bueno para evaluacion |
-| **Fases claras** | Constitution -> Specify -> Plan -> Tasks -> Implement. Facil de ensenar |
+| **Constitución** | Define reglas no negociables (SOLID, ACID) que la IA no puede violar. OpenSpec no tiene este concepto |
+| **Templates oficiales** | spec-template.md, plan-template.md, tasks-template.md con formato estándar |
+| **Git extension** | Comandos /speckit-git-commit, /speckit-git-feature integrados. Útil para los 3 estudiantes |
+| **Analyze + Checklist** | Valida consistencia entre spec, plan y tasks. Bueno para evaluación |
+| **Fases claras** | Constitution -> Specify -> Plan -> Tasks -> Implement. Fácil de enseñar |
 
 ### Ventajas de OpenSpec para este proyecto
 
-| Ventaja | Por que importa aqui |
+| Ventaja | Por qué importa aquí |
 |---------|---------------------|
 | **Delta specs** | Cuando un estudiante agrega una feature, solo documenta LO QUE CAMBIA, no reescribe todo |
-| **Brownfield** | El proyecto ya tiene codigo. OpenSpec esta disenado para esto |
+| **Brownfield** | El proyecto ya tiene código. OpenSpec está diseñado para esto |
 | **Archivado** | Cada change queda archivado con fecha. Trazabilidad completa |
 | **Explore** | `/opsx:explore` permite pensar la idea antes de comprometerse. Bueno para estudiantes |
-| **Mas rapido** | `/opsx:propose` genera TODO de una vez (proposal + specs + design + tasks) |
+| **Más rápido** | `/opsx:propose` genera TODO de una vez (proposal + specs + design + tasks) |
 | **npm** | Los estudiantes ya tienen Node.js (para React). No necesitan instalar Python/uv extra |
 | **Multiidioma** | Puede generar specs en espanol |
 
@@ -367,28 +367,28 @@ FrontFlaskTutorial/
 | Herramienta | Desventaja | Impacto |
 |-------------|-----------|---------|
 | **Spec-Kit** | No tiene delta specs | Hay que reescribir la spec completa para cada cambio |
-| **Spec-Kit** | Instalacion mas compleja (Python + uv + uvx) | Los estudiantes pueden tener problemas con uv |
+| **Spec-Kit** | Instalación más compleja (Python + uv + uvx) | Los estudiantes pueden tener problemas con uv |
 | **Spec-Kit** | Version 0.7.2 (pre-release) | Posibles cambios breaking |
 | **Spec-Kit** | Fases con "gates" | Menos flexible que OpenSpec |
-| **OpenSpec** | No tiene constitucion | Las reglas no negociables no tienen un lugar dedicado |
+| **OpenSpec** | No tiene constitución | Las reglas no negociables no tienen un lugar dedicado |
 | **OpenSpec** | No tiene Git extension | No integra commits/branches como Spec-Kit |
 | **OpenSpec** | No tiene Analyze/Checklist | No valida consistencia entre artefactos |
 | **OpenSpec** | Requiere Node.js 20.19+ | Puede ser problema si tienen version vieja |
 
 ---
 
-## 7. Recomendacion para este proyecto y similares
+## 7. Recomendación para este proyecto y similares
 
 ### Usar AMBAS herramientas, cada una para lo que es mejor:
 
-| Fase del proyecto | Herramienta | Por que |
+| Fase del proyecto | Herramienta | Por qué |
 |-------------------|-------------|---------|
 | **Inicio (greenfield)** | Spec-Kit | Constitution + estructura inicial + fases claras |
-| **Agregar features (brownfield)** | OpenSpec | Delta specs + propose rapido + archivado |
-| **Evaluacion** | Spec-Kit | Analyze + Checklist para verificar completitud |
-| **Trabajo en equipo** | Spec-Kit | Git extension para commits/branches estandar |
-| **Exploracion de ideas** | OpenSpec | `/opsx:explore` sin comprometerse |
-| **Documentacion educativa** | sdd/ (manual) | SOLID, ACID, diagramas Mermaid (ninguna herramienta los genera) |
+| **Agregar features (brownfield)** | OpenSpec | Delta specs + propose rápido + archivado |
+| **Evaluación** | Spec-Kit | Analyze + Checklist para verificar completitud |
+| **Trabajo en equipo** | Spec-Kit | Git extension para commits/branches estándar |
+| **Exploración de ideas** | OpenSpec | `/opsx:explore` sin comprometerse |
+| **Documentación educativa** | sdd/ (manual) | SOLID, ACID, diagramas Mermaid (ninguna herramienta los genera) |
 
 ### Flujo recomendado para estudiantes
 
@@ -414,19 +414,19 @@ FrontFlaskTutorial/
 
 ### Para proyectos similares (tutoriales universitarios)
 
-| Escenario | Recomendacion |
+| Escenario | Recomendación |
 |-----------|--------------|
 | Proyecto nuevo, 1 estudiante | Spec-Kit solo (constitution + specs por feature) |
 | Proyecto nuevo, 3+ estudiantes | Spec-Kit (constitution + git extension) + OpenSpec (delta specs para cada estudiante) |
 | Proyecto existente, agregar features | OpenSpec solo (delta specs + propose + archive) |
-| Curso de Diseno de Software | Ambas + sdd/ manual (para ensenar conceptos: SOLID, ACID, patrones, diagramas) |
-| Produccion real | OpenSpec (brownfield, rapido, multiidioma) |
+| Curso de Diseño de Software | Ambas + sdd/ manual (para enseñar conceptos: SOLID, ACID, patrones, diagramas) |
+| Producción real | OpenSpec (brownfield, rápido, multiidioma) |
 
 ---
 
-## 8. Que instalamos en este proyecto
+## 8. Qué instalamos en este proyecto
 
-| Herramienta | Version | Metodo | Fecha |
+| Herramienta | Versión | Método | Fecha |
 |------------|---------|--------|-------|
 | uv | 0.11.7 | `pip install uv` | 2026-04-14 |
 | specify-cli (Spec-Kit) | 0.7.2.dev0 | `uvx --from git+...spec-kit specify init` | 2026-04-14 |
@@ -454,7 +454,7 @@ FrontFlaskTutorial/
 - OpenSpec repo: [github.com/Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec)
 - OpenSpec guia: [webreactiva.com/blog/openspec](https://www.webreactiva.com/blog/openspec)
 - Spec-Kit repo: [github.com/github/spec-kit](https://github.com/github/spec-kit)
-- Spec-Kit docs: [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md)
+- Spec-Kit documentación: [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md)
 - Video SDD conceptual: [youtu.be/p2WA672HrdI](https://youtu.be/p2WA672HrdI)
 - Video Spec-Kit tutorial: [youtu.be/QzSCmSFKvko](https://youtu.be/QzSCmSFKvko)
 - Blog Microsoft: [Diving Into SDD](https://developer.microsoft.com/blog/spec-driven-development-spec-kit)

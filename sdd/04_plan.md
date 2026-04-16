@@ -1,18 +1,18 @@
-# Etapa 4: Plan de Implementacion
+# Etapa 4: Plan de Implementación
 
-> Segun [Spec-Kit](https://github.com/github/spec-kit): el plan traduce los requisitos de la
-> especificacion en decisiones tecnicas concretas. "Cada eleccion de tecnologia tiene una
+> Según [Spec-Kit](https://github.com/github/spec-kit): el plan traduce los requisitos de la
+> especificación en decisiones técnicas concretas. "Cada elección de tecnología tiene una
 > rationale documentada." El plan se genera con `/speckit.plan` y el humano lo valida.
 >
 > Referencia: [plan-template.md](https://github.com/github/spec-kit/blob/main/templates/plan-template.md)
 
 ---
 
-## 1. Resumen tecnico
+## 1. Resumen técnico
 
-Frontend web en Flask que consume la API generica C# via HTTP.
-Arquitectura MVC adaptada: routes (controladores) + services (logica) + templates (vistas).
-Autenticacion con BCrypt + JWT + sesion Flask.
+Frontend web en Flask que consume la API genérica C# vía HTTP.
+Arquitectura MVC adaptada: routes (controladores) + services (lógica) + templates (vistas).
+Autenticación con BCrypt + JWT + sesión Flask.
 Control de acceso por roles y rutas con middleware `before_request`.
 
 ## 2. Estructura de archivos del proyecto
@@ -76,11 +76,11 @@ FrontFlaskTutorial/
 └── sdd/                             <- Documentacion SDD (estos archivos)
 ```
 
-## 3. Orden de implementacion (por pasos)
+## 3. Orden de implementación (por pasos)
 
-> Cada paso corresponde a un Paso{N}.md del tutorial y a una o mas ramas feature/.
+> Cada paso corresponde a un Paso{N}.md del tutorial y a una o más ramas feature/.
 
-| Orden | Paso | Que se implementa | Dependencias | Estudiante |
+| Orden | Paso | Qué se implementa | Dependencias | Estudiante |
 |-------|------|--------------------|-------------|------------|
 | 1 | Paso 0 | Plan de desarrollo, reglas | Ninguna | Todos |
 | 2 | Paso 3 | Proyecto base: app.py, config.py, git | Paso 0 | Est. 1 |
@@ -147,20 +147,20 @@ Paso 6  Paso 7  (paralelo: producto, persona+usuario)
 | ruta | id | ruta, descripcion | - |
 | rutarol | id | - | fkidrol->rol, fkidruta->ruta |
 
-## 5. Decisiones tecnicas
+## 5. Decisiones técnicas
 
-| Decision | Alternativa | Razon |
+| Decisión | Alternativa | Razón |
 |----------|-------------|-------|
 | ConsultasController (1 SQL) | 5 GETs separados | Eficiencia: BD filtra, no Python |
 | Cookie firmada (Flask session) | JWT stateless | Flask lo trae integrado |
-| `requests` sincrono | `httpx` async | Simplicidad para tutorial |
+| `requests` síncrono | `httpx` async | Simplicidad para tutorial |
 | Bootstrap CDN | npm install | Sin build tools |
 | Middleware before_request | Decorador @login_required | Protege TODO automaticamente |
 | context_processor | Pasar vars manual | Inyecta en todas las templates |
 
 ## 6. Endpoints de la API utilizados
 
-### CRUD generico (cada tabla)
+### CRUD genérico (cada tabla)
 
 ```
 GET    /api/{tabla}?limite=N           <- Listar
@@ -169,7 +169,7 @@ PUT    /api/{tabla}/{pk}/{valor}       <- Actualizar
 DELETE /api/{tabla}/{pk}/{valor}       <- Eliminar
 ```
 
-### Autenticacion y seguridad
+### Autenticación y seguridad
 
 ```
 POST   /api/autenticacion/token        <- Login BCrypt + JWT
@@ -182,8 +182,8 @@ PUT    /api/usuario/{pk}/{val}?camposEncriptar=contrasena  <- Cambiar clave
 
 ## 7. Diagramas de secuencia
 
-> Los diagramas de secuencia muestran la interaccion entre componentes en el tiempo.
-> Formato: [Mermaid](https://mermaid.js.org/) — se renderiza automaticamente en GitHub.
+> Los diagramas de secuencia muestran la interacción entre componentes en el tiempo.
+> Formato: [Mermaid](https://mermaid.js.org/) — se renderiza automáticamente en GitHub.
 
 ### 7.1 Secuencia: Login completo
 
@@ -328,7 +328,7 @@ sequenceDiagram
     N-->>U: Muestra "Acceso Denegado" con boton "Volver"
 ```
 
-### 7.5 Secuencia: Cambiar contrasena
+### 7.5 Secuencia: Cambiar contraseña
 
 ```mermaid
 sequenceDiagram
@@ -364,7 +364,7 @@ sequenceDiagram
 
 ## 8. Diagrama de clases
 
-> Muestra las clases Python del proyecto, sus atributos, metodos y relaciones.
+> Muestra las clases Python del proyecto, sus atributos, métodos y relaciones.
 > Formato: [Mermaid](https://mermaid.js.org/) — se renderiza en GitHub.
 
 ### 8.1 Diagrama de clases completo
@@ -473,17 +473,17 @@ classDiagram
 
 ### 8.2 Relaciones entre clases
 
-| Relacion | Tipo | Descripcion |
+| Relación | Tipo | Descripción |
 |----------|------|-------------|
-| Flask -> AuthMiddleware | Composicion | Flask registra el middleware al iniciar |
-| Flask -> Blueprints | Composicion | Flask registra todos los blueprints |
+| Flask -> AuthMiddleware | Composición | Flask registra el middleware al iniciar |
+| Flask -> Blueprints | Composición | Flask registra todos los blueprints |
 | Blueprints -> ApiService | Dependencia | Los blueprints CRUD usan ApiService para HTTP |
 | BlueprintAuth -> AuthService | Dependencia | Auth usa AuthService para login/roles |
 | BlueprintAuth -> EmailService | Dependencia | Auth usa EmailService para recuperar pwd |
 | ApiService ..> Flask session | Uso | Lee token JWT de la sesion para _headers() |
 | AuthService --|> ApiService | Independiente | AuthService NO depende de ApiService (usa requests directo) |
 
-### 8.3 Por que AuthService es independiente de ApiService?
+### 8.3 Por qué AuthService es independiente de ApiService?
 
 ```
 AuthService usa requests.Session() directo, NO ApiService.
@@ -505,6 +505,6 @@ AuthService                    ApiService
 ## Referencias Spec-Kit
 
 - Formato plan: [plan-template.md](https://github.com/github/spec-kit/blob/main/templates/plan-template.md)
-- Principio de simplicidad: [spec-driven.md, Articulo VII](https://github.com/github/spec-kit/blob/main/spec-driven.md)
+- Principio de simplicidad: [spec-driven.md, Artículo VII](https://github.com/github/spec-kit/blob/main/spec-driven.md)
 - Flujo SDD: [README de Spec-Kit](https://github.com/github/spec-kit)
 - Mermaid (diagramas): [mermaid.js.org](https://mermaid.js.org/)

@@ -1,6 +1,6 @@
 # Modelo de Datos - FrontFlaskTutorial
 
-> Segun [Spec-Kit de GitHub](https://github.com/github/spec-kit), cada feature puede
+> Según [Spec-Kit de GitHub](https://github.com/github/spec-kit), cada feature puede
 > tener un archivo `data-model.md` dedicado con el esquema detallado de entidades.
 > Este archivo contiene el SQL completo para crear todas las tablas del proyecto.
 >
@@ -8,7 +8,7 @@
 
 ---
 
-## 1. Diagrama Entidad-Relacion (ER)
+## 1. Diagrama Entidad-Relación (ER)
 
 ```
                            SEGURIDAD
@@ -219,6 +219,6 @@ INSERT INTO rutarol (fkidrol, fkidruta) VALUES (1, 5);  -- admin -> /usuario
 ## Referencias
 
 - Formato data-model: [Spec-Kit estructura de specs](https://github.com/github/spec-kit)
-- Normalizacion: 02_especificacion.md, seccion 3.3
-- ACID: 01_constitucion.md, Articulo VIII
-- Compatibilidad Postgres/SqlServer: 03_clarificacion.md, seccion 4
+- Normalización: 02_especificacion.md, sección 3.3
+- ACID: 01_constitucion.md, Artículo VIII
+- Compatibilidad Postgres/SqlServer: 03_clarificacion.md, sección 4

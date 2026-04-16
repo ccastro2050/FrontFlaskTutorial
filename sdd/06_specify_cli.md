@@ -1,4 +1,4 @@
-# Specify CLI - Instalacion y Configuracion
+# Specify CLI - Instalación y Configuración
 
 > Este documento registra todo lo que se hizo para instalar y configurar
 > [specify-cli](https://github.com/github/spec-kit), la herramienta oficial
@@ -6,15 +6,15 @@
 
 ---
 
-## 1. Que es specify-cli
+## 1. Qué es specify-cli
 
-Es la herramienta de linea de comandos de [GitHub Spec-Kit](https://github.com/github/spec-kit)
+Es la herramienta de línea de comandos de [GitHub Spec-Kit](https://github.com/github/spec-kit)
 que automatiza y da estructura al Spec Driven Development. Sirve para:
 
-| Funcion | Que hace |
+| Función | Qué hace |
 |---------|----------|
 | **Scaffolding** | Crea la estructura `.specify/` con templates, scripts, constituciones |
-| **Guardrails** | Verifica que el codigo generado cumpla con la constitucion |
+| **Guardrails** | Verifica que el código generado cumpla con la constitución |
 | **Ciclo de vida** | Permite moverse entre las 5 etapas del SDD con comandos |
 
 Referencia: [github.com/github/spec-kit](https://github.com/github/spec-kit)
@@ -23,7 +23,7 @@ Referencia: [github.com/github/spec-kit](https://github.com/github/spec-kit)
 
 ## 2. Prerrequisitos
 
-| Herramienta | Version instalada | Para que |
+| Herramienta | Versión instalada | Para qué |
 |------------|-------------------|----------|
 | Python | 3.14.0 | Runtime (ya estaba instalado) |
 | Git | (ya instalado) | Control de versiones |
@@ -76,7 +76,7 @@ Opciones usadas:
 
 ---
 
-## 4. Que genero specify init
+## 4. Qué generó specify init
 
 ### 4.1 Estructura de carpetas creada
 
@@ -84,7 +84,7 @@ Opciones usadas:
 FrontFlaskTutorial/
 ├── .specify/                              <- Carpeta principal de Spec-Kit
 │   ├── memory/
-│   │   └── constitution.md               <- Plantilla de constitucion (por llenar)
+│   │   └── constitution.md               <- Plantilla de constitución (por llenar)
 │   ├── templates/
 │   │   ├── constitution-template.md      <- Template para constituciones
 │   │   ├── spec-template.md              <- Template para especificaciones
@@ -139,42 +139,42 @@ FrontFlaskTutorial/
 
 ### 4.2 Archivos clave generados
 
-| Archivo | Que es | Estado |
+| Archivo | Qué es | Estado |
 |---------|--------|--------|
-| `.specify/memory/constitution.md` | Plantilla de constitucion con placeholders `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]` | Por llenar (tiene placeholders) |
+| `.specify/memory/constitution.md` | Plantilla de constitución con placeholders `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]` | Por llenar (tiene placeholders) |
 | `.specify/templates/spec-template.md` | Template para crear especificaciones con User Stories y Given/When/Then | Listo para usar |
-| `.specify/templates/plan-template.md` | Template para planes tecnicos | Listo para usar |
+| `.specify/templates/plan-template.md` | Template para planes técnicos | Listo para usar |
 | `.specify/templates/tasks-template.md` | Template para listas de tareas con marcadores `[P]` | Listo para usar |
 | `.specify/init-options.json` | Opciones usadas en `specify init` | Auto-generado |
-| `.specify/integration.json` | Integracion activa: `claude` | Auto-generado |
+| `.specify/integration.json` | Integración activa: `claude` | Auto-generado |
 
 ---
 
 ## 5. Comandos disponibles (skills de Claude Code)
 
-Despues de `specify init --ai claude`, Claude Code tiene estos slash commands:
+Después de `specify init --ai claude`, Claude Code tiene estos slash commands:
 
 ### Comandos principales (ciclo SDD)
 
-| Comando | Fase SDD | Que hace |
+| Comando | Fase SDD | Qué hace |
 |---------|----------|----------|
-| `/speckit-constitution` | Constitucion | Establece principios no negociables del proyecto |
-| `/speckit-specify` | Especificacion | Define requisitos y historias de usuario |
-| `/speckit-clarify` | Clarificacion | Hace preguntas para resolver ambiguedades |
-| `/speckit-plan` | Plan | Crea plan tecnico con stack elegido |
+| `/speckit-constitution` | Constitución | Establece principios no negociables del proyecto |
+| `/speckit-specify` | Especificación | Define requisitos y historias de usuario |
+| `/speckit-clarify` | Clarificación | Hace preguntas para resolver ambigüedades |
+| `/speckit-plan` | Plan | Crea plan técnico con stack elegido |
 | `/speckit-tasks` | Tareas | Genera desglose de tareas ejecutables |
-| `/speckit-implement` | Codigo | Ejecuta las tareas del plan |
+| `/speckit-implement` | Código | Ejecuta las tareas del plan |
 
 ### Comandos de mejora (opcionales)
 
-| Comando | Que hace |
+| Comando | Qué hace |
 |---------|----------|
 | `/speckit-analyze` | Valida consistencia entre artefactos (spec vs plan vs tasks) |
 | `/speckit-checklist` | Genera checklists de calidad para validar requisitos |
 
 ### Comandos de Git
 
-| Comando | Que hace |
+| Comando | Qué hace |
 |---------|----------|
 | `/speckit-git-commit` | Commit con mensaje estandarizado |
 | `/speckit-git-feature` | Crear rama feature/ desde spec |
@@ -184,34 +184,34 @@ Despues de `specify init --ai claude`, Claude Code tiene estos slash commands:
 
 ### Comando extra
 
-| Comando | Que hace |
+| Comando | Qué hace |
 |---------|----------|
 | `/speckit-taskstoissues` | Convertir tareas a GitHub Issues |
 
 ---
 
-## 6. Comparacion: nuestra carpeta sdd/ vs .specify/
+## 6. Comparación: nuestra carpeta sdd/ vs .specify/
 
-> Nuestra carpeta `sdd/` se creo ANTES de instalar specify-cli.
+> Nuestra carpeta `sdd/` se creó ANTES de instalar specify-cli.
 > Ambas coexisten. `sdd/` tiene contenido real del proyecto;
 > `.specify/` tiene plantillas y herramientas del CLI.
 
 | Aspecto | sdd/ (nuestros docs) | .specify/ (Spec-Kit CLI) |
 |---------|---------------------|------------------------|
-| Contenido | Documentacion REAL del proyecto (llena, con datos concretos) | Plantillas con PLACEHOLDERS (por llenar) |
-| Constitucion | `01_constitucion.md` (322 lineas, SOLID, ACID, patrones) | `memory/constitution.md` (plantilla vacia) |
-| Especificacion | `02_especificacion.md` (244 lineas, modelo ER, flujos) | `templates/spec-template.md` (formato Given/When/Then) |
-| Plan | `04_plan.md` (510 lineas, diagramas secuencia y clases) | `templates/plan-template.md` (estructura vacia) |
-| Tareas | `05_tareas.md` (221 lineas, todas completadas) | `templates/tasks-template.md` (formato con [P]) |
-| Modelo de datos | `data-model.md` (224 lineas, SQL completo) | No tiene (se crea por feature) |
-| Clarificacion | `03_clarificacion.md` (131 lineas, preguntas resueltas) | No tiene (se genera con /speckit-clarify) |
+| Contenido | Documentación REAL del proyecto (llena, con datos concretos) | Plantillas con PLACEHOLDERS (por llenar) |
+| Constitución | `01_constitucion.md` (322 líneas, SOLID, ACID, patrones) | `memory/constitution.md` (plantilla vacía) |
+| Especificación | `02_especificacion.md` (244 líneas, modelo ER, flujos) | `templates/spec-template.md` (formato Given/When/Then) |
+| Plan | `04_plan.md` (510 líneas, diagramas secuencia y clases) | `templates/plan-template.md` (estructura vacía) |
+| Tareas | `05_tareas.md` (221 líneas, todas completadas) | `templates/tasks-template.md` (formato con [P]) |
+| Modelo de datos | `data-model.md` (224 líneas, SQL completo) | No tiene (se crea por feature) |
+| Clarificación | `03_clarificacion.md` (131 líneas, preguntas resueltas) | No tiene (se genera con /speckit-clarify) |
 | Skills Claude | No aplica | `.claude/skills/speckit-*/SKILL.md` (14 skills) |
 | Scripts | No aplica | `.specify/scripts/powershell/` (5 scripts) |
 | Git extension | No aplica | `.specify/extensions/git/` (comandos git) |
 
-### Conclusion
+### Conclusión
 
-La carpeta `sdd/` es la **documentacion viva del proyecto** — tiene todo el contenido real.
+La carpeta `sdd/` es la **documentación viva del proyecto** — tiene todo el contenido real.
 La carpeta `.specify/` es la **infraestructura de Spec-Kit** — tiene templates, scripts y skills
 para crear nuevas features siguiendo el flujo SDD.
 
@@ -220,7 +220,7 @@ Para features futuras, se puede usar `/speckit-specify` que creara una carpeta
 
 ---
 
-## 7. Como usar specify-cli en el dia a dia
+## 7. Cómo usar specify-cli en el día a día
 
 ### Para crear una nueva feature
 
@@ -252,19 +252,19 @@ Para features futuras, se puede usar `/speckit-specify` que creara una carpeta
 ## 8. Referencias
 
 - Repositorio oficial: [github.com/github/spec-kit](https://github.com/github/spec-kit)
-- Documentacion SDD: [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md)
-- Guia instalacion: [github.github.com/spec-kit/installation.html](https://github.github.com/spec-kit/installation.html)
+- Documentación SDD: [spec-driven.md](https://github.com/github/spec-kit/blob/main/spec-driven.md)
+- Guía instalación: [github.github.com/spec-kit/installation.html](https://github.github.com/spec-kit/installation.html)
 - Blog Microsoft: [Diving Into SDD With Spec Kit](https://developer.microsoft.com/blog/spec-driven-development-spec-kit)
 - Paquete npm: [@spec-kit/cli](https://www.npmjs.com/package/@spec-kit/cli)
 - Video SDD: [La forma CORRECTA de programar con IA en 2026](https://youtu.be/p2WA672HrdI)
 - Video tutorial: [GitHub Spec Kit - Tutorial Completo con ejemplo](https://youtu.be/QzSCmSFKvko)
-- DeepWiki: [Instalacion Spec-Kit](https://deepwiki.com/github/spec-kit/2.1-installation)
+- DeepWiki: [Instalación Spec-Kit](https://deepwiki.com/github/spec-kit/2.1-installation)
 
 ---
 
-## 9. Documentacion generada con Spec-Kit (llenada)
+## 9. Documentación generada con Spec-Kit (llenada)
 
-Despues de `specify init`, las plantillas estaban vacias (con placeholders).
+Después de `specify init`, las plantillas estaban vacías (con placeholders).
 Se llenaron manualmente con los datos reales del proyecto, siguiendo el formato
 oficial de Spec-Kit.
 
@@ -272,12 +272,12 @@ oficial de Spec-Kit.
 
 | Archivo | Estado anterior | Estado actual |
 |---------|----------------|---------------|
-| `.specify/memory/constitution.md` | Placeholders `[PROJECT_NAME]`, `[PRINCIPLE_1]` | Lleno: 6 principios (API-First, Descubrimiento Dinamico, Seguridad 3 Capas, SOLID, ACID, Simplicidad) + stack + convenciones + prohibiciones + patrones |
-| `.specify/specs/012-login-y-control-acceso/spec.md` | No existia | Creado: 5 User Stories con Given/When/Then (login, control acceso, JWT, cambiar pwd, recuperar pwd) |
-| `.specify/specs/012-login-y-control-acceso/plan.md` | No existia | Creado: arquitectura, componentes, endpoints, security design, rationale |
-| `.specify/specs/012-login-y-control-acceso/tasks.md` | No existia | Creado: tareas por story con [P], todas completadas, validacion final |
+| `.specify/memory/constitution.md` | Placeholders `[PROJECT_NAME]`, `[PRINCIPLE_1]` | Lleno: 6 principios (API-First, Descubrimiento Dinámico, Seguridad 3 Capas, SOLID, ACID, Simplicidad) + stack + convenciones + prohibiciones + patrones |
+| `.specify/specs/012-login-y-control-acceso/spec.md` | No existía | Creado: 5 User Stories con Given/When/Then (login, control acceso, JWT, cambiar pwd, recuperar pwd) |
+| `.specify/specs/012-login-y-control-acceso/plan.md` | No existía | Creado: arquitectura, componentes, endpoints, security design, rationale |
+| `.specify/specs/012-login-y-control-acceso/tasks.md` | No existía | Creado: tareas por story con [P], todas completadas, validación final |
 
-### Relacion entre sdd/ y .specify/
+### Relación entre sdd/ y .specify/
 
 ```
 sdd/                                    .specify/
@@ -293,8 +293,8 @@ data-model.md (224 lineas, SQL)         (no tiene equivalente - se crea por feat
 06_specify_cli.md (ESTE archivo)        (no tiene equivalente)
 ```
 
-**sdd/** tiene contenido mas extenso y educativo (tutorial, con SOLID, ACID, diagramas Mermaid).
-**.specify/** tiene contenido en formato estandar de Spec-Kit (Given/When/Then, componentes, rationale).
+**sdd/** tiene contenido más extenso y educativo (tutorial, con SOLID, ACID, diagramas Mermaid).
+**.specify/** tiene contenido en formato estándar de Spec-Kit (Given/When/Then, componentes, rationale).
 
 Ambas carpetas coexisten y se complementan. **Ninguna se borra.**
 
@@ -302,15 +302,15 @@ Ambas carpetas coexisten y se complementan. **Ninguna se borra.**
 
 ## 10. Diagramas Mermaid (mejora sobre Spec-Kit)
 
-Segun el video [GitHub Spec Kit - Tutorial Completo](https://youtu.be/QzSCmSFKvko):
+Según el video [GitHub Spec Kit - Tutorial Completo](https://youtu.be/QzSCmSFKvko):
 
 > "Como algo malo [de Spec-Kit] es quiza la falta de uso de Mermaid. En mis
 > proyectos siempre tengo un diagrama entidad-relacion para facilitarle a la IA
 > que entienda la estructura de mi base de datos, asi como diagramas de secuencia
 > para que entienda la arquitectura o un diagrama de flujo para los flujos."
 
-**En este proyecto SI incluimos diagramas Mermaid** (en `sdd/04_plan.md`):
-- 5 diagramas de secuencia (login, CRUD listar, CRUD crear, acceso denegado, cambiar contrasena)
+**En este proyecto SÍ incluimos diagramas Mermaid** (en `sdd/04_plan.md`):
+- 5 diagramas de secuencia (login, CRUD listar, CRUD crear, acceso denegado, cambiar contraseña)
 - 1 diagrama de clases (ApiService, AuthService, Blueprints, Middleware)
 - Diagrama ER en `sdd/data-model.md`
 
@@ -318,12 +318,12 @@ Esto complementa lo que Spec-Kit no incluye por defecto.
 
 ---
 
-## 11. Fecha y version
+## 11. Fecha y versión
 
-- **Fecha de instalacion**: 2026-04-14
-- **specify-cli version**: 0.7.2.dev0
+- **Fecha de instalación**: 2026-04-14
+- **specify-cli versión**: 0.7.2.dev0
 - **uv version**: 0.11.7
 - **Python**: 3.14.0
 - **Plataforma**: Windows 11 Pro (AMD64)
-- **Integracion**: Claude Code
+- **Integración**: Claude Code
 - **Script type**: PowerShell
