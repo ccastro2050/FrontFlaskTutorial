@@ -35,6 +35,7 @@ Fuentes:
 | **data-model.md** | Diagrama ER, SQL completo PostgreSQL/SqlServer, diccionario de datos | [data-model.md](data-model.md) |
 | **Diagramas de secuencia** | Login, CRUD listar, CRUD crear, acceso denegado, cambiar contrasena (Mermaid) | [04_plan.md](04_plan.md) seccion 7 |
 | **Diagrama de clases** | ApiService, AuthService, Blueprints, Middleware, relaciones (Mermaid) | [04_plan.md](04_plan.md) seccion 8 |
+| **Specify CLI** | Instalacion, configuracion, comandos, comparacion sdd/ vs .specify/ | [06_specify_cli.md](06_specify_cli.md) |
 
 ### Principio central
 
