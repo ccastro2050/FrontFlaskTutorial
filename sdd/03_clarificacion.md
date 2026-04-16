@@ -92,3 +92,40 @@ Sin JWT, alguien puede abrir Postman y hacer `DELETE /api/usuario/email/admin@te
 | Bootstrap CDN | Tailwind, Material UI | Sin build tools, funciona con un link |
 | Descubrimiento dinamico FK/PK | Hardcodear nombres | Funciona con cualquier BD |
 | Middleware before_request | Decorador @login_required | Protege TODAS las rutas automaticamente |
+| PostgreSQL | MySQL, SQLite | ACID completo, soporte de JSON, compatible con SqlServer |
+| 3FN (normalizacion) | Desnormalizar para rendimiento | Integridad sobre velocidad en sistema transaccional |
+| Tablas intermedias N:M | Arrays en columna | 1FN: valores atomicos, sin grupos repetidos |
+
+## 7. Preguntas resueltas sobre el modelo de datos
+
+### P: Por que cliente tiene FK a persona Y a empresa?
+**R:** Un cliente puede ser persona natural (fkcodpersona) O persona juridica (fkcodempresa). `fkcodempresa` es nullable — si es persona natural, no tiene empresa. Esto cumple 3FN porque el nombre de la persona no se duplica en la tabla cliente.
+
+### P: Por que productosporfactura tiene su propio campo "precio"?
+**R:** Porque el precio del producto puede cambiar en el futuro. Si solo guardamos el FK al producto, al consultar una factura vieja mostraria el precio actual, no el que se cobro. Guardar el precio al momento de la venta es un patron estandar de facturacion.
+
+### P: Por que usuario tiene email como PK y no un id numerico?
+**R:** Porque el email es unico y natural — es lo que el usuario escribe para hacer login. Usar un id numerico obligaria a hacer un JOIN extra para buscar por email. Ademas, simplifica las FKs en rol_usuario (`fkemail` es legible).
+
+### P: Por que las tablas de seguridad (rol, ruta, rutarol) estan separadas de las de negocio?
+**R:** Principio de Single Responsibility (SOLID - S). Las tablas de negocio (producto, factura) manejan datos del dominio. Las tablas de seguridad (rol, ruta) manejan permisos. Si un dia se cambia el sistema de permisos, no se tocan las tablas de negocio.
+
+### P: Por que no usar herencia de tablas (una tabla padre "persona" para cliente y vendedor)?
+**R:** Porque PostgreSQL no soporta herencia de tablas de forma estandar (SQL Server tampoco). Ademas, cliente y vendedor tienen atributos diferentes (credito vs comision). Usar tablas separadas es mas simple y portable.
+
+### P: Por que ACID y no BASE (eventual consistency)?
+**R:** Este es un sistema transaccional (facturas, contrasenas, permisos). ACID garantiza que una factura se crea completa o no se crea. BASE es para sistemas distribuidos de alta escala (redes sociales, IoT) donde se acepta inconsistencia temporal. Un sistema de facturacion NO puede tener inconsistencia temporal — el dinero no puede "eventualmente" cuadrar.
+
+## 8. Principios de diseno aplicados (resumen)
+
+| Principio | Categoria | Donde aplica | Referencia |
+|-----------|-----------|-------------|------------|
+| SOLID - S (Single Responsibility) | OOP | Cada archivo/clase tiene 1 responsabilidad | 01_constitucion.md, Art. VII |
+| SOLID - O (Open/Closed) | OOP | Agregar CRUD = archivos nuevos, no modificar existentes | 01_constitucion.md, Art. VII |
+| SOLID - D (Dependency Inversion) | OOP | Routes dependen de ApiService, no de requests | 01_constitucion.md, Art. VII |
+| ACID | BD | PostgreSQL garantiza transacciones integras | 01_constitucion.md, Art. VIII |
+| 3FN (Normalizacion) | BD | Sin datos redundantes, FKs para relaciones | 02_especificacion.md, seccion ER |
+| MVC | Arquitectura | services/ + templates/ + routes/ | 01_constitucion.md, Art. II |
+| Facade | Patron | ApiService oculta complejidad HTTP | 01_constitucion.md, Art. IX |
+| Strategy (fallback) | Patron | ConsultasController o 5 GETs segun disponibilidad | 01_constitucion.md, Art. IX |
+| Middleware/Interceptor | Patron | before_request verifica auth en CADA request | 01_constitucion.md, Art. IX |

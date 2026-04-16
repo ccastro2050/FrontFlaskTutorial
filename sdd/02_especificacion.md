@@ -72,7 +72,91 @@ Un **frontend web completo** en Flask que:
 └──────────┘
 ```
 
-### 3.3 Flujos de usuario
+### 3.3 Modelo Entidad-Relacion (ER) detallado
+
+> El modelo ER define las entidades (tablas), sus atributos (columnas),
+> las relaciones entre ellas (FKs) y las restricciones (PKs, NOT NULL, UNIQUE).
+> Es la base para el diseno de la BD.
+
+#### Normalizacion aplicada
+
+| Forma Normal | Que exige | Cumple? | Ejemplo |
+|-------------|-----------|---------|---------|
+| **1FN** | Valores atomicos, sin grupos repetidos | Si | Cada columna tiene un solo valor, no hay arrays |
+| **2FN** | Todo atributo depende de TODA la PK | Si | En `productosporfactura`, cantidad depende de (fknumfact + fkcodprod), no solo de uno |
+| **3FN** | No hay dependencias transitivas | Si | En `cliente`, el nombre de la persona NO se duplica — se accede via FK a `persona` |
+
+#### Tabla de entidades y atributos
+
+**Entidades de negocio:**
+
+| Entidad | PK | Atributos | Tipo | NOT NULL | Descripcion |
+|---------|-----|-----------|------|----------|-------------|
+| **producto** | codigo (varchar) | nombre | varchar | si | Nombre del producto |
+| | | precio | decimal | si | Precio unitario |
+| | | existencia | integer | no | Cantidad en stock |
+| **persona** | codigo (varchar) | nombre | varchar | si | Nombre completo |
+| | | telefono | varchar | no | Telefono de contacto |
+| | | direccion | varchar | no | Direccion fisica |
+| **empresa** | codigo (varchar) | nombre | varchar | si | Razon social |
+| | | nit | varchar | no | Numero tributario |
+| **cliente** | id (serial) | credito | decimal | si | Limite de credito |
+| | | fkcodpersona | varchar FK | si | -> persona.codigo |
+| | | fkcodempresa | varchar FK | no | -> empresa.codigo |
+| **vendedor** | codigo (varchar) | nombre | varchar | si | Nombre del vendedor |
+| | | comision | decimal | no | Porcentaje comision |
+| **factura** | numfactura (serial) | fecha | timestamp | si | Fecha de emision |
+| | | total | decimal | si | Total de la factura |
+| | | fkcodvendedor | varchar FK | si | -> vendedor.codigo |
+| | | fkcodcliente | integer FK | si | -> cliente.id |
+| **productosporfactura** | id (serial) | cantidad | integer | si | Unidades vendidas |
+| | | precio | decimal | si | Precio al momento de la venta |
+| | | fknumfact | integer FK | si | -> factura.numfactura |
+| | | fkcodprod | varchar FK | si | -> producto.codigo |
+
+**Entidades de seguridad:**
+
+| Entidad | PK | Atributos | Tipo | NOT NULL | Descripcion |
+|---------|-----|-----------|------|----------|-------------|
+| **usuario** | email (varchar) | contrasena | varchar | si | Hash BCrypt (irreversible) |
+| | | nombre | varchar | no | Nombre para mostrar |
+| | | debe_cambiar_contrasena | boolean | no | Forzar cambio en proximo login |
+| **rol** | id (serial) | nombre | varchar | si | Nombre del rol (Administrador, etc) |
+| **rol_usuario** | id (serial) | fkemail | varchar FK | si | -> usuario.email |
+| | | fkidrol | integer FK | si | -> rol.id |
+| **ruta** | id (serial) | ruta | varchar | si | Path de la pagina (/producto) |
+| | | descripcion | text | no | Descripcion de la pagina |
+| **rutarol** | id (serial) | fkidrol | integer FK | si | -> rol.id |
+| | | fkidruta | integer FK | si | -> ruta.id |
+
+#### Cardinalidad de las relaciones
+
+| Relacion | Tipo | Lectura | Tabla intermedia |
+|----------|------|---------|-----------------|
+| persona <-> cliente | 1:N | Una persona puede ser 0 o N clientes | No (FK directo) |
+| empresa <-> cliente | 1:N | Una empresa puede tener 0 o N clientes | No (FK directo) |
+| vendedor <-> factura | 1:N | Un vendedor tiene 0 o N facturas | No (FK directo) |
+| cliente <-> factura | 1:N | Un cliente tiene 0 o N facturas | No (FK directo) |
+| factura <-> producto | N:M | Una factura tiene N productos, un producto aparece en M facturas | Si: `productosporfactura` |
+| usuario <-> rol | N:M | Un usuario tiene N roles, un rol tiene N usuarios | Si: `rol_usuario` |
+| rol <-> ruta | N:M | Un rol accede a N rutas, una ruta la acceden N roles | Si: `rutarol` |
+
+#### Integridad referencial
+
+```
+ON DELETE: Todas las FKs usan NO ACTION (no se puede borrar un registro
+           que tenga hijos). La API devuelve error si se intenta.
+
+ON UPDATE: NO ACTION. Si se cambia una PK, los FKs no se actualizan
+           automaticamente (se debe actualizar manualmente).
+
+Consecuencia practica:
+  - No se puede borrar un vendedor que tenga facturas
+  - No se puede borrar un rol que tenga usuarios asignados
+  - No se puede borrar una ruta que este asignada a un rol
+```
+
+### 3.4 Flujos de usuario
 
 #### Flujo 1: Login
 

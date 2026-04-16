@@ -28,6 +28,14 @@ Fuentes:
 | 4 | **Plan** | `/speckit.plan` | Plan tecnico: estructura, dependencias, orden de implementacion | [04_plan.md](04_plan.md) |
 | 5 | **Tareas y Codigo** | `/speckit.tasks` + `/speckit.implement` | Lista de tareas ejecutables, luego la IA escribe el codigo | [05_tareas.md](05_tareas.md) |
 
+### Artefactos adicionales (segun Spec-Kit)
+
+| Artefacto | Que contiene | Documento |
+|-----------|-------------|-----------|
+| **data-model.md** | Diagrama ER, SQL completo PostgreSQL/SqlServer, diccionario de datos | [data-model.md](data-model.md) |
+| **Diagramas de secuencia** | Login, CRUD listar, CRUD crear, acceso denegado, cambiar contrasena (Mermaid) | [04_plan.md](04_plan.md) seccion 7 |
+| **Diagrama de clases** | ApiService, AuthService, Blueprints, Middleware, relaciones (Mermaid) | [04_plan.md](04_plan.md) seccion 8 |
+
 ### Principio central
 
 > "Lo mas importante del SDD es que la documentacion es un entregable que se versiona, y el codigo es el resultado de esta documentacion."
