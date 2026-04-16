@@ -218,9 +218,109 @@ FrontFlaskTutorial/
 
 ---
 
-## 6. Comparacion detallada: Spec-Kit vs OpenSpec
+## 6. Comparacion detallada: Manual (sdd/) vs Spec-Kit vs OpenSpec
 
-### Tabla comparativa general
+### Tabla comparativa de los 3 enfoques
+
+| Aspecto | sdd/ (Manual) | Spec-Kit (GitHub) | OpenSpec (Fission AI) |
+|---------|---------------|-------------------|----------------------|
+| **Quién genera** | El humano escribe todo | La IA llena templates via /speckit-* | La IA genera artefactos via /opsx:* |
+| **Instalacion** | Ninguna (solo crear archivos .md) | Python + uv + uvx | Node.js + npm |
+| **Complejidad setup** | Cero | Media (uv puede fallar en Windows) | Baja (npm install y listo) |
+| **Formato** | Libre (tu decides la estructura) | Formato fijo (templates oficiales) | Formato fijo (proposal/spec/design/tasks) |
+| **Constitucion** | Si (01_constitucion.md, 322 lineas) | Si (constitution.md, formato oficial) | No (usa config.yaml con context) |
+| **Diagramas Mermaid** | Si (secuencia, clases, ER) | No (falta segun el video) | No |
+| **SOLID, ACID, patrones** | Si (explicados con ejemplos) | No (solo si los escribes) | No |
+| **Delta specs** | No | No | Si (ADDED, MODIFIED, REMOVED) |
+| **Archivado** | No | No | Si (archive/ con fecha) |
+| **Given/When/Then** | No | Si (spec-template.md) | Si (formato BDD) |
+| **Paralelizacion [P]** | Si (manual) | Si (tasks-template.md) | Si (automatico) |
+| **Git extension** | No | Si (/speckit-git-*) | No |
+| **Analyze/Checklist** | No | Si (/speckit-analyze) | Si (/opsx:verify) |
+| **Multiidioma** | Si (escribes en el idioma que quieras) | No (ingles) | Si (ES, PT, ZH, JA, FR, DE) |
+| **Brownfield** | Si (funciona con cualquier proyecto) | Limitado | Disenado para esto |
+| **Educativo** | Muy alto (tutorial detallado) | Medio (formato estandar) | Medio (formato estandar) |
+| **Reproducible** | No (cada quien escribe diferente) | Si (templates + slash commands) | Si (propose genera todo igual) |
+| **Agentes IA** | Cualquiera (es solo Markdown) | Claude, Copilot, Gemini, +10 | Claude, Copilot, Cursor, +20 |
+| **Estrellas GitHub** | N/A | ~5.000 | 30.000+ |
+| **Version** | N/A | 0.7.2 (pre-release) | 1.3.0 (estable) |
+
+### Tabla comparativa: que tiene cada uno
+
+| Documento/Feature | sdd/ (Manual) | .specify/ (Spec-Kit) | openspec/ (OpenSpec) |
+|-------------------|:---:|:---:|:---:|
+| Constitucion / reglas globales | ✅ 01_constitucion.md | ✅ constitution.md | ❌ (usa config.yaml) |
+| Especificacion / spec por feature | ✅ 02_especificacion.md | ✅ specs/{feature}/spec.md | ✅ specs/{dominio}/spec.md |
+| Clarificacion / preguntas | ✅ 03_clarificacion.md | ✅ /speckit-clarify | ✅ /opsx:explore |
+| Plan tecnico | ✅ 04_plan.md | ✅ specs/{feature}/plan.md | ✅ changes/{nombre}/design.md |
+| Tareas ejecutables | ✅ 05_tareas.md | ✅ specs/{feature}/tasks.md | ✅ changes/{nombre}/tasks.md |
+| Modelo de datos (SQL) | ✅ data-model.md | ❌ (se crea manual) | ❌ (se crea manual) |
+| Diagramas secuencia (Mermaid) | ✅ 04_plan.md sec.7 | ❌ | ❌ |
+| Diagrama clases (Mermaid) | ✅ 04_plan.md sec.8 | ❌ | ❌ |
+| SOLID explicado con ejemplos | ✅ 01_constitucion.md | ❌ | ❌ |
+| ACID explicado | ✅ 01_constitucion.md | ❌ | ❌ |
+| Patrones de diseno | ✅ 01_constitucion.md | ❌ | ❌ |
+| Delta specs (cambios incrementales) | ❌ | ❌ | ✅ |
+| Archivado de cambios | ❌ | ❌ | ✅ |
+| Proposal (por que + alcance) | ❌ | ❌ | ✅ changes/{}/proposal.md |
+| Given/When/Then (BDD) | ❌ | ✅ | ✅ |
+| Git integration (commits/branches) | ❌ | ✅ /speckit-git-* | ❌ |
+| Guia de instalacion | ✅ 06_specify_cli.md | ✅ GUIA_SPECKIT.md | ✅ 07_openspec.md |
+
+### Ventajas de cada enfoque
+
+**sdd/ (Manual) — Lo mejor para ensenar**
+
+| Ventaja | Por que |
+|---------|---------|
+| Total libertad de formato | Puedes incluir SOLID, ACID, patrones, diagramas, lo que quieras |
+| No requiere instalacion | Solo Markdown, funciona en cualquier editor |
+| Diagramas Mermaid | Ni Spec-Kit ni OpenSpec los generan |
+| Contenido educativo | Explicaciones con ejemplos, comparaciones, narrativas |
+| Cualquier idioma | Escribes en espanol directamente |
+| Sin dependencia de herramienta | Si Spec-Kit o OpenSpec desaparecen, tu sdd/ sigue |
+
+**Spec-Kit — Lo mejor para estructura y validacion**
+
+| Ventaja | Por que |
+|---------|---------|
+| Constitucion como concepto formal | Reglas no negociables que la IA respeta |
+| Templates estandar | Todos los specs tienen el mismo formato |
+| /speckit-analyze | Valida que spec, plan y tasks esten alineados |
+| /speckit-checklist | Genera checklist de calidad automatico |
+| Git extension | Commits y branches estandarizados |
+| Fases claras | Facil de ensenar: 1.Constitution 2.Specify 3.Plan 4.Tasks 5.Implement |
+
+**OpenSpec — Lo mejor para proyectos existentes**
+
+| Ventaja | Por que |
+|---------|---------|
+| Delta specs | Solo documentas LO QUE CAMBIA, no reescribes todo |
+| /opsx:propose | Genera TODO de una vez (proposal + spec + design + tasks) |
+| /opsx:explore | Piensas la idea antes de comprometerte |
+| Archivado | Trazabilidad completa con fechas |
+| npm install | Facil de instalar (los estudiantes ya tienen Node.js) |
+| Multiidioma | Specs en espanol nativo |
+| 30.000+ estrellas | Comunidad activa, actualizaciones frecuentes |
+
+### Desventajas de cada enfoque
+
+| Enfoque | Desventaja | Impacto |
+|---------|-----------|---------|
+| **Manual (sdd/)** | No es reproducible (cada quien escribe diferente) | Dificil estandarizar en equipos grandes |
+| **Manual (sdd/)** | No tiene validacion automatica | No sabes si spec y codigo estan alineados |
+| **Manual (sdd/)** | Requiere disciplina del humano | Si no escribes, no existe |
+| **Spec-Kit** | No tiene delta specs | Reescribir spec completa para cada cambio |
+| **Spec-Kit** | Pre-release (v0.7.2) | Posibles cambios breaking |
+| **Spec-Kit** | uv puede fallar en Windows | Instalacion complicada para estudiantes |
+| **Spec-Kit** | Sin diagramas Mermaid | Falta visual |
+| **OpenSpec** | No tiene constitucion | Reglas globales no tienen lugar dedicado |
+| **OpenSpec** | No tiene Git extension | No integra commits |
+| **OpenSpec** | Requiere Node.js 20.19+ | Version reciente |
+
+---
+
+### Tabla comparativa general (original Spec-Kit vs OpenSpec)
 
 | Aspecto | Spec-Kit (GitHub) | OpenSpec (Fission AI) |
 |---------|-------------------|----------------------|
