@@ -66,8 +66,9 @@ def crear_middleware(app):
             return redirect(url_for("auth.cambiar_contrasena"))
 
         # 4. Control de acceso por ruta
-        #    La ruta "/" (home) siempre es accesible para usuarios autenticados
-        if request.path == "/":
+        #    La ruta "/" (home) y "/cambiar-contrasena" siempre son accesibles
+        #    para usuarios autenticados (cambiar contrasena no depende de roles)
+        if request.path in ("/", "/cambiar-contrasena"):
             return
 
         rutas_permitidas = set(session.get("rutas_permitidas", []))
