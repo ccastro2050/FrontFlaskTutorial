@@ -22,10 +22,12 @@
                 {% endfor %}
             {% endwith %}
             <form method="POST">
+                {% if not session.get("debe_cambiar_contrasena") %}
                 <div class="mb-3">
                     <label class="form-label">Contrasena actual</label>
                     <input type="password" class="form-control" name="actual" required>
                 </div>
+                {% endif %}
                 <div class="mb-3">
                     <label class="form-label">Nueva contrasena</label>
                     <input type="password" class="form-control" name="nueva" required>

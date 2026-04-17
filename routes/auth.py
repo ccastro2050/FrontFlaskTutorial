@@ -123,6 +123,17 @@ def cambiar_contrasena_post():
     actual = request.form.get("actual", "")
     nueva = request.form.get("nueva", "")
     confirmar = request.form.get("confirmar", "")
+    es_forzado = session.get("debe_cambiar_contrasena", False)
+
+    # Si NO es forzado, verificar la contrasena actual contra la API
+    if not es_forzado:
+        if not actual:
+            flash("Ingrese su contrasena actual.", "danger")
+            return render_template("pages/cambiar_contrasena.html")
+        ok_actual, _ = auth.login(email, actual)
+        if not ok_actual:
+            flash("La contrasena actual es incorrecta.", "danger")
+            return render_template("pages/cambiar_contrasena.html")
 
     if nueva != confirmar:
         flash("Las contrasenas no coinciden.", "danger")
